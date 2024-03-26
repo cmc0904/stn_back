@@ -114,4 +114,9 @@ public class UserServiceImpl implements UserSerivce {
         System.out.println(String.format("SELECT * FROM stn_users WHERE %s LIKE '%s'", type, content + '%'));
         return userRepository.getUserLIKE(type, content );
     }
+
+
+    public void git_test() {
+        System.out.println("Git Test 문찬 ~");
+    }
 }
