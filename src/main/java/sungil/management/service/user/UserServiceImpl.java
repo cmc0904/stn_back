@@ -116,7 +116,4 @@ public class UserServiceImpl implements UserSerivce {
     }
 
 
-    public void git_test() {
-        System.out.println("Git Test 문찬 ~");
-    }
 }

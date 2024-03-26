@@ -48,7 +48,6 @@ public class RepairServiceImpl implements RepairService {
 
     @Override
     public Map<String, String> processRegistration(RepairResult repairResult) {
-        System.out.println("준호");
         Map<String, String> map = new HashMap<>();
 
         try {
