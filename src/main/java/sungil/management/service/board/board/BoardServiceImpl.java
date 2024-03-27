@@ -3,21 +3,20 @@ package sungil.management.service.board.board;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sungil.management.domain.Board;
-import sungil.management.domain.ResponseDto;
-import sungil.management.domain.User;
 import sungil.management.repository.board.board.BoardRepository;
 import sungil.management.utils.PageNationUtil;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
-public class BoardSerivceImpl implements BoardSerivce {
+public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
 
     @Autowired
-    public BoardSerivceImpl(BoardRepository boardRepository) {
+    public BoardServiceImpl(BoardRepository boardRepository) {
         this.boardRepository = boardRepository;
     }
 
@@ -88,5 +87,18 @@ public class BoardSerivceImpl implements BoardSerivce {
     @Override
     public List<Integer> getPageNumbers() {
         return PageNationUtil.getPageNationNumbers(boardRepository.getAllBoard(), 5);
+    }
+
+    @Override
+    public List<Board> getBoardByTitle(String content) {
+        if(content.isBlank()) {
+            return new ArrayList<>();
+        }
+        return boardRepository.findByTitleLIKE(content);
+    }
+
+    @Override
+    public List<Board> getBoardByDate(String date) {
+        return boardRepository.findByCreatAt(date);
     }
 }

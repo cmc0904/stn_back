@@ -27,4 +27,9 @@ public interface MyBatisBoardRepository extends BoardRepository {
 
     @Select("SELECT idx as boardIdx, title as boardTitle, detail as boardDetail, writerId, createAt FROM stn_board order by createAt desc limit #{limit}")
     List<Board> getBoardListByPageNum(int limit);
+
+    @Select("SELECT idx as boardIdx, title as boardTitle, detail as boardDetail, writerId, createAt FROM stn_board WHERE title LIKE CONCAT(#{findContent}, '%') order by createAt desc")
+    List<Board> findByTitleLIKE(String findContent);
+    @Select("SELECT idx as boardIdx, title as boardTitle, detail as boardDetail, writerId, createAt FROM stn_board WHERE DATE_FORMAT(createAt, '%Y-%m-%d') = #{date} order by createAt desc")
+    List<Board> findByCreatAt(String date);
 }
