@@ -38,4 +38,7 @@ public interface MyBatisUserRepository extends UserRepository {
 
     @Delete("delete from stn_users where userId = #{userId}")
     void deleteUserByUserId(String userId);
+
+    @Update("update stn_users set userId =  #{userId}, password =  #{userPassword}, name =  #{userName}, email =  #{userEmail}, address =  #{userAddress}, phone =  #{userPhone}, gender =  #{userGender} where userId = #{userId}")
+    void updateUser(User user);
 }
