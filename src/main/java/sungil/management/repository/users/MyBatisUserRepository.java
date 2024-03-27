@@ -17,7 +17,6 @@ public interface MyBatisUserRepository extends UserRepository {
     @Select("SELECT * FROM stn_users WHERE ${type} LIKE CONCAT(#{content}, '%')")
     List<User> getUserLIKE(@Param("type") String type, @Param("content") String content);
 
-
     @Select("SELECT u.* FROM stn_users u, stn_roles r where u.userId = r.userId and r.role = 'Admin'")
     List<User> getAllAdmins();
 
