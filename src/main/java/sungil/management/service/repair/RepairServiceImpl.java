@@ -60,4 +60,31 @@ public class RepairServiceImpl implements RepairService {
 
         return map;
     }
+
+    @Override
+    public Map<String, String> complete(int idx) {
+        Map<String, String> map = new HashMap<>();
+        try {
+            repaireRepository.updateRepairFlagToOne(idx);
+            map.put("result", "COMPLETE");
+        } catch (Exception e) {
+            map.put("result", "FAILED");
+        }
+
+        return map;
+    }
+
+    @Override
+    public Map<String, String> editRegistration(RepairResult repairResult) {
+        Map<String, String> map = new HashMap<>();
+        try {
+            repaireRepository.updateAdminIdAndVisitTime(repairResult);
+            map.put("result", "COMPLETE");
+        } catch (Exception e) {
+            map.put("result", "FAILED");
+        }
+
+        return map;
+    }
+
 }

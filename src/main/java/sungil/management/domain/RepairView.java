@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 public class RepairView {
 //    SELECT r.idx, r.customerUserId, r.problemTitle, r.problemComment, r.createAt, u.name, u.address, u.email, u.phone, u.gender, rr.adminId, rr.visitDate
     private int idx;
+    private int rIdx;
     private String customerUserId;
     private String problemTitle;
     private String problemComment;
@@ -18,6 +19,7 @@ public class RepairView {
     private String email;
     private String phone;
     private String gender;
+    private int finished;
     private String adminId;
     private LocalDateTime visitDate;
 }
