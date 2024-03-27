@@ -117,14 +117,14 @@ public class UserServiceImpl implements UserSerivce {
 
     @Override
     public Map<String, String> updateUser(User user) {
-
-        userRepository.updateUser(user);
-
-        System.out.println(user);
-
         Map<String, String> map = new HashMap<>();
-        map.put("result", "ㄴㅁㄴ");
 
+        try {
+            userRepository.updateUser(user);
+            map.put("result", "UPDATE");
+        } catch (Exception e ) {
+            map.put("result", "FAILED");
+        }
         return map;
     }
 
