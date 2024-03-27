@@ -90,4 +90,9 @@ public class UserController {
     public List<User> liveSearch(String type, String content) {
         return userSerivce.search(type, content);
     }
+
+    @PutMapping("/updateUser")
+    public ResponseEntity<Map<String, String>> updateUser(@RequestBody User user){
+        return ResponseEntity.ok(userSerivce.updateUser(user));
+    }
 }

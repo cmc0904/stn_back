@@ -22,4 +22,6 @@ public interface UserSerivce {
 
     List<User> getUserByPageNumber(int pageNumber);
     List<User> search(String type, String content);
+
+    Map<String, String> updateUser(User user);
 }

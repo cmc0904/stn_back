@@ -115,5 +115,18 @@ public class UserServiceImpl implements UserSerivce {
         return userRepository.getUserLIKE(type, content );
     }
 
+    @Override
+    public Map<String, String> updateUser(User user) {
+
+        userRepository.updateUser(user);
+
+        System.out.println(user);
+
+        Map<String, String> map = new HashMap<>();
+        map.put("result", "ㄴㅁㄴ");
+
+        return map;
+    }
+
 
 }

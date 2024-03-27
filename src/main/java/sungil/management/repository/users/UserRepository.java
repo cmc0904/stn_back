@@ -17,4 +17,6 @@ public interface UserRepository {
     void deleteUserByUserId(String userId);
     List<User> getUsersLimit(int limit);
     List<User> getUserLIKE(String type, String content);
+
+    void updateUser(User user);
 }
