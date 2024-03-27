@@ -111,19 +111,20 @@ public class UserServiceImpl implements UserSerivce {
 
     @Override
     public List<User> search(String type, String content) {
+        System.out.println(String.format("SELECT * FROM stn_users WHERE %s LIKE '%s'", type, content + '%'));
         return userRepository.getUserLIKE(type, content );
     }
 
     @Override
     public Map<String, String> updateUser(User user) {
-        Map<String, String> map = new HashMap<>();
 
-        try {
-            userRepository.updateUser(user);
-            map.put("result", "UPDATE");
-        } catch (Exception e ) {
-            map.put("result", "FAILED");
-        }
+        userRepository.updateUser(user);
+
+        System.out.println(user);
+
+        Map<String, String> map = new HashMap<>();
+        map.put("result", "ㄴㅁㄴ");
+
         return map;
     }
 
