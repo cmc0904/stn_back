@@ -13,4 +13,5 @@ public class Board {
     private String boardDetail;
     private String writerId;
     private Date createAt;
+    private int isPrivate;
 }

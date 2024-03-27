@@ -29,6 +29,7 @@ public class BoardController {
     @PostMapping("/postBoard")
     public ResponseEntity<?> postBoard(@RequestHeader("Authorization") String authorizationHeader, @RequestBody Board board) {
         board.setWriterId(jwtTokenValidator.getUserIdFromToken(jwtTokenValidator.extractJwtToken(authorizationHeader)));
+        System.out.println(board);
         return ResponseEntity.ok(boardService.postBoard(board));
     }
 

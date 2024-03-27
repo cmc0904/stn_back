@@ -55,9 +55,14 @@ public class BoardServiceImpl implements BoardService {
         Map<String, String> map = new HashMap<>();
 
         try {
+            String content = board.getBoardDetail();
+
+            board.setBoardDetail(content.replaceAll("\n", "<br>"));
+
             boardRepository.insertBoard(board);
             map.put("result", "ADD_BOARD_COMPLETE");
         } catch (Exception e) {
+            e.printStackTrace();
             map.put("result", "FAILED_ADD_BOARD");
         }
 
