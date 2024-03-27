@@ -14,8 +14,17 @@ public interface MyBatisRepaireRepository extends RepaireRepository{
     @Options(useGeneratedKeys = true, keyProperty = "repairRegistrationIdx", keyColumn = "idx")
     void insertRepaire(RepairRegistration repairRegistration);
 
-    @Select("SELECT r.idx, r.customerUserId, r.problemTitle, r.problemComment, r.createAt, u.name, u.address, u.email, u.phone, u.gender, rr.adminId, rr.finished, rr.visitDate, rr.idx as rIdx FROM stn_repair r JOIN stn_users u ON u.userId = r.customerUserId LEFT JOIN stn_repair_result rr ON rr.repairIdx = r.idx")
+    @Select("SELECT r.idx, r.customerUserId, r.problemTitle, r.problemComment, r.createAt, u.name, u.address, u.email, u.phone, u.gender, rr.adminId, rr.finished, rr.visitDate, rr.idx, rr.finished as rIdx FROM stn_repair r JOIN stn_users u ON u.userId = r.customerUserId LEFT JOIN stn_repair_result rr ON rr.repairIdx = r.idx")
     List<RepairView> getAllRepairStatus();
+
+    @Select("SELECT r.idx, r.customerUserId, r.problemTitle, r.problemComment, r.createAt, u.name, u.address, u.email, u.phone, u.gender, rr.adminId, rr.visitDate, rr.finished FROM stn_repair r JOIN stn_users u ON u.userId = r.customerUserId LEFT JOIN stn_repair_result rr ON rr.repairIdx = r.idx where rr.adminId is null ")
+    List<RepairView> getWaitRepairStatus();
+
+    @Select("SELECT r.idx, r.customerUserId, r.problemTitle, r.problemComment, r.createAt, u.name, u.address, u.email, u.phone, u.gender, rr.adminId, rr.visitDate, rr.finished FROM stn_repair r JOIN stn_users u ON u.userId = r.customerUserId LEFT JOIN stn_repair_result rr ON rr.repairIdx = r.idx where rr.adminId is not null and finished = 0")
+    List<RepairView> getExpectedRepairStatus();
+
+    @Select("SELECT r.idx, r.customerUserId, r.problemTitle, r.problemComment, r.createAt, u.name, u.address, u.email, u.phone, u.gender, rr.adminId, rr.visitDate, rr.finished  FROM stn_repair r JOIN stn_users u ON u.userId = r.customerUserId LEFT JOIN stn_repair_result rr ON rr.repairIdx = r.idx where rr.adminId is not NULL AND finished = 1")
+    List<RepairView> getEndedRepairStatus();
     @Insert("insert into stn_repair_result(repairIdx, adminId, visitDate) values (#{repairIdx}, #{adminId}, #{visitDate})")
     void insertRepairResult(RepairResult repairResult);
 
