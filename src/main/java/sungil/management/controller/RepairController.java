@@ -47,4 +47,13 @@ public class RepairController {
     public ResponseEntity<List<RepairView>> getRepairStatusBy(@RequestHeader("Authorization") String authorizationHeader, String userId) {
         return ResponseEntity.ok(repairService.getRepairStatusByUserId(userId == null ? jwtTokenValidator.getUserIdFromToken(jwtTokenValidator.extractJwtToken(authorizationHeader)) : userId));
     }
+    @PostMapping("/completeRepair")
+    public ResponseEntity<Map<String, String>> proccessRegistration(@RequestBody int idx) {
+        return ResponseEntity.ok(repairService.complete(idx));
+    }
+
+    @PutMapping("/editAdminIdVisitDate")
+    public ResponseEntity<Map<String, String>> editAdminIdAndVisitDate(@RequestBody RepairResult repairResult) {
+        return ResponseEntity.ok(repairService.editRegistration(repairResult));
+    }
 }
