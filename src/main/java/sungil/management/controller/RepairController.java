@@ -9,6 +9,7 @@ import sungil.management.domain.RepairView;
 import sungil.management.jwt.JwtTokenValidator;
 import sungil.management.service.repair.RepairService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,8 @@ public class RepairController {
 
     @GetMapping("/getRepairFiltering") // 대기
     public ResponseEntity<?> getRepairWaitStatus(String type) {
+
+
         if(type.equals("allData")) {
             return ResponseEntity.ok(repairService.getAllRepairStatus());
         } else if (type.equals("waiting")) {
@@ -52,7 +55,6 @@ public class RepairController {
             Map<String, String> map = new HashMap<>();
             map.put("result", "CHECK_TYPE");
             return ResponseEntity.ok(map);
-
         }
 
     }
@@ -82,4 +84,18 @@ public class RepairController {
     public ResponseEntity<Map<String, String>> editAdminIdAndVisitDate(@RequestBody RepairResult repairResult) {
         return ResponseEntity.ok(repairService.editRegistration(repairResult));
     }
+
+    @GetMapping("/searchRepair")
+    public ResponseEntity<List<RepairView>> searchRepair(String userId, String type){
+        System.out.println(type);
+        if (type.equals("allData")){
+            return ResponseEntity.ok(repairService.allSearchRepair(userId));
+        } else if (type.equals("waiting")) {
+            return ResponseEntity.ok(repairService.waitSearchRepair(userId));
+        } else if (type.equals("willVisit")) {
+            return ResponseEntity.ok(repairService.expectedSearchRepair(userId));
+        } else if (type.equals("finished")) {
+            return ResponseEntity.ok(repairService.endedSearchRepair(userId));
+        }
+        return ResponseEntity.ok(new ArrayList<>());    }
 }

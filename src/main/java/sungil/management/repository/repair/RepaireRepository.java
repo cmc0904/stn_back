@@ -34,5 +34,13 @@ public interface RepaireRepository {
     // 담당 관리자, 방문 시간대 변경
     void updateAdminIdAndVisitTime(RepairResult repairResult);
 
+    List<RepairView> allSearchRepair(String userId);
+    List<RepairView> endedSearchRepair(String userId);
+
+    List<RepairView> expectedSearchRepair(String userId);
+
+    List<RepairView> waitSearchRepair(String userId);
+
+
 
 }

@@ -36,4 +36,17 @@ public interface MyBatisRepaireRepository extends RepaireRepository{
 
     @Update("update stn_repair_result set adminId = #{adminId}, visitDate = #{visitDate} where idx = #{idx}")
     void updateAdminIdAndVisitTime(RepairResult repairResult);
+
+    @Select("SELECT r.idx, r.customerUserId, r.problemTitle, r.problemComment, r.createAt, u.name, u.address, u.email, u.phone, u.gender, rr.adminId, rr.finished, rr.visitDate, rr.idx, rr.finished as rIdx FROM stn_repair r JOIN stn_users u ON u.userId = r.customerUserId LEFT JOIN stn_repair_result rr ON rr.repairIdx = r.idx WHERE r.customerUserID LIKE CONCAT(#{customerUserId}, '%')")
+    List<RepairView> allSearchRepair(String userId);
+    @Select("SELECT r.idx, r.customerUserId, r.problemTitle, r.problemComment, r.createAt, u.name, u.address, u.email, u.phone, u.gender, rr.adminId, rr.visitDate, rr.finished FROM stn_repair r JOIN stn_users u ON u.userId = r.customerUserId and r.customerUserID LIKE CONCAT(#{userId}, '%') LEFT JOIN stn_repair_result rr ON rr.repairIdx = r.idx where rr.adminId is not NULL AND finished = 1")
+    List<RepairView> endedSearchRepair(String userId);
+
+    @Select("SELECT r.idx, r.customerUserId, r.problemTitle, r.problemComment, r.createAt, u.name, u.address, u.email, u.phone, u.gender, rr.adminId, rr.visitDate, rr.finished FROM stn_repair r JOIN stn_users u ON u.userId = r.customerUserId and r.customerUserID LIKE CONCAT(#{userId}, '%') LEFT JOIN stn_repair_result rr ON rr.repairIdx = r.idx where rr.adminId is not NULL AND finished = 0")
+    List<RepairView> expectedSearchRepair(String userId);
+
+    @Select("SELECT r.idx, r.customerUserId, r.problemTitle, r.problemComment, r.createAt, u.name, u.address, u.email, u.phone, u.gender, rr.adminId, rr.visitDate, rr.finished FROM stn_repair r JOIN stn_users u ON u.userId = r.customerUserId and r.customerUserID LIKE CONCAT(#{userId}, '%') LEFT JOIN stn_repair_result rr ON rr.repairIdx = r.idx where rr.adminId is NULL AND finished is null")
+    List<RepairView> waitSearchRepair(String userId);
+
+
 }
