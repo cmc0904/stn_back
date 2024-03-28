@@ -42,6 +42,20 @@ public class RepairServiceImpl implements RepairService {
     }
 
     @Override
+    public List<RepairView> getWaitRepairStatus() {
+        return repaireRepository.getWaitRepairStatus();
+    }
+
+    @Override
+    public List<RepairView> getExpectedRepairStatus() {
+        return repaireRepository.getExpectedRepairStatus();
+    }
+
+    @Override
+    public List<RepairView> getEndedRepairStatus() {
+        return repaireRepository.getEndedRepairStatus();
+    }
+    @Override
     public List<RepairView> getRepairStatusByUserId(String userId) {
         return repaireRepository.getRepairStatusByUserId(userId);
     }
@@ -60,6 +74,8 @@ public class RepairServiceImpl implements RepairService {
 
         return map;
     }
+
+
 
     @Override
     public Map<String, String> complete(int idx) {

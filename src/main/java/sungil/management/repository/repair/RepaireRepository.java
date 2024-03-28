@@ -14,6 +14,14 @@ public interface RepaireRepository {
     // 현황 확인
     List<RepairView> getAllRepairStatus();
 
+    // 접수 대기
+    List<RepairView> getWaitRepairStatus();
+
+    // 방문 예정
+    List<RepairView> getExpectedRepairStatus();
+
+    //처리완료
+    List<RepairView> getEndedRepairStatus();
     // 현황 확인
     List<RepairView> getRepairStatusByUserId(String userId);
 

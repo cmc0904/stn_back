@@ -9,6 +9,7 @@ import sungil.management.domain.RepairView;
 import sungil.management.jwt.JwtTokenValidator;
 import sungil.management.service.repair.RepairService;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +36,31 @@ public class RepairController {
     @GetMapping("/getRepairStatus")
     public ResponseEntity<List<RepairView>> getRepairStatus() {
         return ResponseEntity.ok(repairService.getAllRepairStatus());
+    }
+
+    @GetMapping("/getRepairFiltering") // 대기
+    public ResponseEntity<?> getRepairWaitStatus(String type) {
+        if(type.equals("allData")) {
+            return ResponseEntity.ok(repairService.getAllRepairStatus());
+        } else if (type.equals("waiting")) {
+            return ResponseEntity.ok(repairService.getWaitRepairStatus());
+        }else if (type.equals("willVisit")) {
+            return ResponseEntity.ok(repairService.getExpectedRepairStatus());
+        }else if (type.equals("finished")) {
+            return ResponseEntity.ok(repairService.getEndedRepairStatus());
+        } else {
+            Map<String, String> map = new HashMap<>();
+            map.put("result", "CHECK_TYPE");
+            return ResponseEntity.ok(map);
+
+        }
+
+    }
+
+
+    @GetMapping("getRepairExpectedStatus") // 예정
+    public ResponseEntity<List<RepairView>> getRepairExpectedStatus() {
+        return ResponseEntity.ok(repairService.getExpectedRepairStatus());
     }
 
 

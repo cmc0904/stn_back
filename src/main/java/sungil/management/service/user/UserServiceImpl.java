@@ -86,8 +86,6 @@ public class UserServiceImpl implements UserSerivce {
         } catch (Exception e) {
             map.put("result" , "CAN_NOT_ADD_ROLE");
         }
-
-
         return map;
     }
 
