@@ -97,5 +97,6 @@ public class RepairController {
         } else if (type.equals("finished")) {
             return ResponseEntity.ok(repairService.endedSearchRepair(userId));
         }
-        return ResponseEntity.ok(new ArrayList<>());    }
+        return ResponseEntity.ok(new ArrayList<>());
+    }
 }
