@@ -103,4 +103,23 @@ public class RepairServiceImpl implements RepairService {
         return map;
     }
 
+    @Override
+    public List<RepairView> allSearchRepair(String userId) {
+        return repaireRepository.allSearchRepair(userId);
+    }
+
+    @Override
+    public List<RepairView> endedSearchRepair(String userId) {
+        return repaireRepository.endedSearchRepair(userId);
+    }
+
+    @Override
+    public List<RepairView> expectedSearchRepair(String userId) {
+        return repaireRepository.expectedSearchRepair(userId);
+    }
+
+    @Override
+    public List<RepairView> waitSearchRepair(String userId) {
+        return repaireRepository.waitSearchRepair(userId);
+    }
 }

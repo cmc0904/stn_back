@@ -24,5 +24,12 @@ public interface RepairService {
     Map<String, String> complete(int idx);
     Map<String, String> editRegistration(RepairResult repairResult);
 
+    List<RepairView> allSearchRepair(String userId);
+    List<RepairView> endedSearchRepair(String userId);
+
+    List<RepairView> expectedSearchRepair(String userId);
+
+    List<RepairView> waitSearchRepair(String userId);
+
 
 }
