@@ -1,47 +1,78 @@
 package sungil.management.controller;
 
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.tomcat.util.http.parser.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import sungil.management.domain.Board;
 import sungil.management.domain.Comment;
 import sungil.management.jwt.JwtTokenValidator;
+import sungil.management.repository.file.FileRepository;
 import sungil.management.service.board.board.BoardService;
 import sungil.management.service.board.comment.CommentService;
 
 
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/board")
 public class BoardController {
     private final BoardService boardService;
     private final CommentService commentService;
-    private final JwtTokenValidator jwtTokenValidator;
+
+    private final FileRepository fileRepository;
+
+
     @Autowired
-    public BoardController(BoardService boardService, CommentService commentService, JwtTokenValidator jwtTokenValidator) {
+    public BoardController(BoardService boardService, CommentService commentService, FileRepository fileRepository) {
         this.boardService = boardService;
         this.commentService = commentService;
-        this.jwtTokenValidator = jwtTokenValidator;
+        this.fileRepository = fileRepository;
     }
 
-    @PostMapping("/postBoard")
-    public ResponseEntity<?> postBoard(@RequestHeader("Authorization") String authorizationHeader, @RequestBody Board board) {
-        board.setWriterId(jwtTokenValidator.getUserIdFromToken(jwtTokenValidator.extractJwtToken(authorizationHeader)));
-        System.out.println(board);
+    @PostMapping(path = "/postBoard")
+    public ResponseEntity<?> postBoard(
+            @RequestParam(value = "flL", required = false) MultipartFile[] files
+            , @RequestParam(value = "title") String title
+            , @RequestParam(value = "content") String content
+            , @RequestParam(value = "isPrivate") String isPrivate
+            , Authentication authentication
+    ) {
+
+        Board board = new Board(
+                title
+                , content
+                , authentication.getName()
+                , Integer.parseInt(isPrivate)
+                , files
+        );
+
         return ResponseEntity.ok(boardService.postBoard(board));
     }
 
     @GetMapping("/getAllBoard")
     public ResponseEntity<?> getAllBoard() {
-
         return ResponseEntity.ok(boardService.getAllBoard());
     }
 
     @GetMapping("/getBoardByUserIdx")
-    public ResponseEntity<?> getBoardByWriterId(@RequestHeader("Authorization") String authorizationHeader, String userId) {
-        return ResponseEntity.ok(boardService.getBoardByWriterId(userId == null ? jwtTokenValidator.getUserIdFromToken(jwtTokenValidator.extractJwtToken(authorizationHeader)) : userId));
+    public ResponseEntity<?> getBoardByWriterId(Authentication authentication, String userId) {
+        String writerId = userId == null ? authentication.getName() : userId;
+        return ResponseEntity.ok(boardService.getBoardByWriterId(writerId));
     }
 
     @GetMapping("/getBoardByTitle")
@@ -79,8 +110,8 @@ public class BoardController {
     }
 
     @PostMapping("/addComment")
-    public ResponseEntity<Map<String, String>> addComment(@RequestHeader("Authorization") String authorizationHeader, @RequestBody Comment comment) {
-        comment.setWriterId(jwtTokenValidator.getUserIdFromToken(jwtTokenValidator.extractJwtToken(authorizationHeader)));
+    public ResponseEntity<Map<String, String>> addComment(Authentication authentication, @RequestBody Comment comment) {
+        comment.setWriterId(authentication.getName());
         return ResponseEntity.ok(commentService.addComment(comment));
     }
 
@@ -90,9 +121,33 @@ public class BoardController {
     }
 
     @GetMapping("/getBoardByPageNumber")
-    public List<Board> getUsersByPage(int page) {
-        return boardService.getBoardListByPageNum(page);
+    public ResponseEntity<List<Board>> getUsersByPage(int page) {
+        return ResponseEntity.ok(boardService.getBoardListByPageNum(page));
     }
+
+    @GetMapping("/image/download")
+    public ResponseEntity<byte[]> downloadImage(String fileName) {
+
+        try {
+            byte[] fileBytes = fileRepository.getFileByFileName(fileName);
+
+            return ResponseEntity.ok()
+                    .header("Content-Disposition", "attachment; filename=\"" + fileName + "\"")
+                    .body(fileBytes);
+        } catch (IOException e) {
+
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+
+        }
+
+    }
+
+    @GetMapping("/getFileNames")
+    public ResponseEntity<List<String>> getFileNameByBoardIdx(int boardIdx) {
+        System.out.println(boardService.getAllFileNameByBoardIdx(boardIdx));
+        return ResponseEntity.ok(boardService.getAllFileNameByBoardIdx(boardIdx));
+    }
+
 
 
 
