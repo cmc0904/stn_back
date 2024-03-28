@@ -17,4 +17,6 @@ public interface BoardService {
     List<Board> getBoardByTitle(String content);
     List<Board> getBoardByDate(String date);
 
+    List<String> getAllFileNameByBoardIdx(int boardIdx);
+
 }

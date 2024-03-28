@@ -22,5 +22,6 @@ public interface BoardRepository {
 
     List<Board> findByCreatAt(String date);
 
-
+    void saveFileName(int boardIdx, String fileName);
+    List<String> getAllFileNameByBoardIdx(int boardIdx);
 }

@@ -20,6 +20,7 @@ public interface MyBatisBoardRepository extends BoardRepository {
     void updateBoard(Board board);
 
     @Insert("insert into stn_board (title, detail, writerId, createAt, private) values (#{boardTitle}, #{boardDetail}, #{writerId}, NOW(), #{isPrivate})")
+    @Options(useGeneratedKeys = true, keyProperty = "boardIdx", keyColumn = "idx")
     void insertBoard(Board board);
 
     @Delete("delete from stn_board where idx = #{boardIdx}")
@@ -32,4 +33,9 @@ public interface MyBatisBoardRepository extends BoardRepository {
     List<Board> findByTitleLIKE(String findContent);
     @Select("SELECT idx as boardIdx, title as boardTitle, detail as boardDetail, writerId, createAt FROM stn_board WHERE DATE_FORMAT(createAt, '%Y-%m-%d') = #{date} and private = 0 order by createAt desc")
     List<Board> findByCreatAt(String date);
+    @Insert("insert into stn_board_files (boardIdx, fileName) values (#{boardIdx}, #{fileName})")
+    void saveFileName(int boardIdx, String fileName);
+
+    @Select("select fileName from stn_board_files where boardIdx = #{boardIdx}")
+    List<String> getAllFileNameByBoardIdx(int boardIdx);
 }
