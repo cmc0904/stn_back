@@ -2,6 +2,8 @@ package sungil.management.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import sungil.management.domain.Board;
 import sungil.management.domain.Comment;
@@ -18,17 +20,15 @@ import java.util.Map;
 public class BoardController {
     private final BoardService boardService;
     private final CommentService commentService;
-    private final JwtTokenValidator jwtTokenValidator;
     @Autowired
-    public BoardController(BoardService boardService, CommentService commentService, JwtTokenValidator jwtTokenValidator) {
+    public BoardController(BoardService boardService, CommentService commentService) {
         this.boardService = boardService;
         this.commentService = commentService;
-        this.jwtTokenValidator = jwtTokenValidator;
     }
 
     @PostMapping("/postBoard")
-    public ResponseEntity<?> postBoard(@RequestHeader("Authorization") String authorizationHeader, @RequestBody Board board) {
-        board.setWriterId(jwtTokenValidator.getUserIdFromToken(jwtTokenValidator.extractJwtToken(authorizationHeader)));
+    public ResponseEntity<?> postBoard(Authentication authentication, @RequestBody @Validated Board board) {
+        board.setWriterId(authentication.getName());
         System.out.println(board);
         return ResponseEntity.ok(boardService.postBoard(board));
     }
@@ -40,8 +40,8 @@ public class BoardController {
     }
 
     @GetMapping("/getBoardByUserIdx")
-    public ResponseEntity<?> getBoardByWriterId(@RequestHeader("Authorization") String authorizationHeader, String userId) {
-        return ResponseEntity.ok(boardService.getBoardByWriterId(userId == null ? jwtTokenValidator.getUserIdFromToken(jwtTokenValidator.extractJwtToken(authorizationHeader)) : userId));
+    public ResponseEntity<?> getBoardByWriterId(Authentication authentication, String userId) {
+        return ResponseEntity.ok(boardService.getBoardByWriterId(userId == null ? authentication.getName() : userId));
     }
 
     @GetMapping("/getBoardByTitle")
@@ -63,7 +63,7 @@ public class BoardController {
     }
 
     @PutMapping("/updateBoard")
-    public ResponseEntity<Map<String, String>> updateBoard(@RequestBody Board board) {
+    public ResponseEntity<Map<String, String>> updateBoard(@RequestBody @Validated Board board) {
         return ResponseEntity.ok(boardService.updateBoard(board));
     }
 
@@ -79,8 +79,8 @@ public class BoardController {
     }
 
     @PostMapping("/addComment")
-    public ResponseEntity<Map<String, String>> addComment(@RequestHeader("Authorization") String authorizationHeader, @RequestBody Comment comment) {
-        comment.setWriterId(jwtTokenValidator.getUserIdFromToken(jwtTokenValidator.extractJwtToken(authorizationHeader)));
+    public ResponseEntity<Map<String, String>> addComment(Authentication authentication, @RequestBody @Validated Comment comment) {
+        comment.setWriterId(authentication.getName());
         return ResponseEntity.ok(commentService.addComment(comment));
     }
 

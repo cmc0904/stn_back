@@ -2,6 +2,8 @@ package sungil.management.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import sungil.management.domain.RepairRegistration;
 import sungil.management.domain.RepairResult;
@@ -16,20 +18,17 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/repair")
 public class RepairController {
-
-    private final JwtTokenValidator jwtTokenValidator;
     private final RepairService repairService;
 
     @Autowired
-    public RepairController(JwtTokenValidator jwtTokenValidator, RepairService repairService) {
-        this.jwtTokenValidator = jwtTokenValidator;
+    public RepairController(RepairService repairService) {
         this.repairService = repairService;
     }
 
 
     @PostMapping("/registrationrepair")
-    public ResponseEntity<Map<String, String>> registration(@RequestHeader("Authorization") String authorizationHeader, @RequestBody RepairRegistration repairRegistration) {
-        repairRegistration.setCustomerUserId(jwtTokenValidator.getUserIdFromToken(jwtTokenValidator.extractJwtToken(authorizationHeader)));
+    public ResponseEntity<Map<String, String>> registration(Authentication authentication, @RequestBody @Validated RepairRegistration repairRegistration) {
+        repairRegistration.setCustomerUserId(authentication.getName());
         return ResponseEntity.ok(repairService.registrationRepair(repairRegistration));
     }
 
@@ -65,13 +64,13 @@ public class RepairController {
 
 
     @PostMapping("/processrepair")
-    public ResponseEntity<Map<String, String>> proccessRegistration(@RequestBody RepairResult repairResult) {
+    public ResponseEntity<Map<String, String>> proccessRegistration(@RequestBody @Validated RepairResult repairResult) {
         return ResponseEntity.ok(repairService.processRegistration(repairResult));
     }
 
     @GetMapping("/getRepairStatusByUserId")
-    public ResponseEntity<List<RepairView>> getRepairStatusBy(@RequestHeader("Authorization") String authorizationHeader, String userId) {
-        return ResponseEntity.ok(repairService.getRepairStatusByUserId(userId == null ? jwtTokenValidator.getUserIdFromToken(jwtTokenValidator.extractJwtToken(authorizationHeader)) : userId));
+    public ResponseEntity<List<RepairView>> getRepairStatusBy(Authentication authentication, String userId) {
+        return ResponseEntity.ok(repairService.getRepairStatusByUserId(userId == null ? authentication.getName() : userId));
     }
     @PostMapping("/completeRepair")
     public ResponseEntity<Map<String, String>> proccessRegistration(@RequestBody int idx) {
@@ -79,7 +78,7 @@ public class RepairController {
     }
 
     @PutMapping("/editAdminIdVisitDate")
-    public ResponseEntity<Map<String, String>> editAdminIdAndVisitDate(@RequestBody RepairResult repairResult) {
+    public ResponseEntity<Map<String, String>> editAdminIdAndVisitDate(@RequestBody @Validated RepairResult repairResult) {
         return ResponseEntity.ok(repairService.editRegistration(repairResult));
     }
 }

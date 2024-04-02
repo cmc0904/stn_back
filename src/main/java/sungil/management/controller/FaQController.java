@@ -3,6 +3,7 @@ package sungil.management.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import sungil.management.domain.FaQ;
 import sungil.management.service.faq.FaQService;
@@ -31,12 +32,12 @@ public class FaQController {
     }
 
     @PostMapping("/addFaQ")
-    public ResponseEntity<Map<String, String>> addFaQ(@RequestBody FaQ faQ) {
+    public ResponseEntity<Map<String, String>> addFaQ(@RequestBody @Validated FaQ faQ) {
         return ResponseEntity.ok(faQService.addFaQ(faQ));
     }
 
     @PutMapping("/updateFaQ")
-    public ResponseEntity<Map<String, String>> updateFaQ(@RequestBody FaQ faQ) {
+    public ResponseEntity<Map<String, String>> updateFaQ(@RequestBody @Validated FaQ faQ) {
         return ResponseEntity.ok(faQService.updateFaQ(faQ));
     }
 
