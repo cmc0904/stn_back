@@ -12,10 +12,10 @@ import java.util.UUID;
 public class FaQ {
     private Integer idx;
     @NotBlank
-    @Size(min = 5, max = 20)
+    @Size(min = 5, max = 50)
     private String question;
 
     @NotBlank
-    @Size(min = 5, max = 40)
+    @Size(min = 5, max = 100)
     private String answer;
 }

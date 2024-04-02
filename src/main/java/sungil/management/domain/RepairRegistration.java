@@ -16,16 +16,15 @@ public class RepairRegistration {
 
     private Integer repairRegistrationIdx;
 
-    @NotBlank
-    @Size(min = 4, max = 10)
+
     private String customerUserId;
 
     @NotBlank
-    @Size(min = 5, max = 10)
+    @Size(min = 5, max = 50)
     private String problemTitle;
 
     @NotBlank
-    @Size(min = 5, max = 50)
+    @Size(min = 5, max = 100)
     private String problemComment;
 
     private Date createAt;

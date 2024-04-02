@@ -21,6 +21,7 @@ public class User {
     private String userPassword;
 
     @Size(min = 2, max = 8, message = "최소 2자 이상 8자 이하여야 합니다.")
+    @NotBlank(message = "userName은 공백일 수 없습니다.")
     private String userName;
 
     @Size(min = 8, max = 20, message = "최소 8자 이상 20자 이하여야 합니다.")

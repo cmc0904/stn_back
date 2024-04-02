@@ -15,7 +15,7 @@ public class Comment {
     @NotNull
     private Integer boardIdx;
     @NotBlank
-    @Size(min = 1, max = 50)
+    @Size(min = 5, max = 50)
     private String comment;
 
     @NotBlank

@@ -14,16 +14,17 @@ import java.sql.Date;
 public class Board {
     private Integer boardIdx;
 
-    @Size(min = 1, max = 20)
+    @Size(min = 5, max = 20)
     @NotBlank
     private String boardTitle;
 
     @NotBlank
-    @Size(min = 1, max = 100)
+    @Size(min = 5, max = 100)
     private String boardDetail;
 
     @Size(min = 4, max = 10)
     private String writerId;
+
 
     private Date createAt;
 
