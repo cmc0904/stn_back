@@ -19,4 +19,6 @@ public interface BoardService {
 
     List<String> getAllFileNameByBoardIdx(int boardIdx);
 
+    Map<String, String> changePrivate(int idx, int priv);
+
 }

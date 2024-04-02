@@ -38,6 +38,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public List<Board> getBoardByWriterId(String writerId) {
+        System.out.println( boardRepository.getBoardByWriterId(writerId));
         return boardRepository.getBoardByWriterId(writerId);
     }
 
@@ -124,5 +125,20 @@ public class BoardServiceImpl implements BoardService {
     public List<String> getAllFileNameByBoardIdx(int boardIdx) {
         System.out.println(boardIdx);
         return boardRepository.getAllFileNameByBoardIdx(boardIdx);
+    }
+
+    @Override
+    public Map<String, String> changePrivate(int idx, int priv) {
+        Map<String, String> map = new HashMap<>();
+
+        try {
+            boardRepository.setPrivate(idx, priv);
+            map.put("result", "EDIT_COMPLETE");
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("result", "FAILED_EDIT");
+        }
+
+        return map;
     }
 }

@@ -13,8 +13,9 @@ public interface MyBatisBoardRepository extends BoardRepository {
     @Select("SELECT idx as boardIdx, title as boardTitle, detail as boardDetail, writerId, createAt FROM stn_board where idx = #{boardIdx} and private = 0")
     Board getBoardByBoardIdx(Integer boardIdx);
 
-    @Select("Select idx as boardIdx, title as boardTitle, detail as boardDetail, writerId, createAt from stn_board where writerId = #{writerId} and private = 0")
+    @Select("Select idx as boardIdx, title as boardTitle, detail as boardDetail, writerId, createAt, `private` as isPrivate from stn_board where writerId = #{writerId} and private = 0")
     List<Board> getBoardByWriterId(String writerId);
+
 
     @Update("update stn_board set title = #{boardTitle}, detail = #{boardDetail} where idx = #{boardIdx} and private = 0")
     void updateBoard(Board board);
@@ -38,4 +39,7 @@ public interface MyBatisBoardRepository extends BoardRepository {
 
     @Select("select fileName from stn_board_files where boardIdx = #{boardIdx}")
     List<String> getAllFileNameByBoardIdx(int boardIdx);
+
+    @Update("update stn_board set private = #{pr} where idx = #{boardIdx}")
+    void setPrivate(int pr, int boardIdx);
 }

@@ -2,6 +2,8 @@ package sungil.management.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import sungil.management.domain.ResponseDto;
 import sungil.management.domain.Role;
@@ -20,12 +22,10 @@ import java.util.Map;
 @RequestMapping("/api/user")
 public class UserController {
     private final UserSerivce userSerivce;
-    private final JwtTokenValidator jwtTokenValidator;
 
     @Autowired
-    public UserController(UserSerivce userSerivce, JwtTokenValidator jwtTokenValidator) {
+    public UserController(UserSerivce userSerivce) {
         this.userSerivce = userSerivce;
-        this.jwtTokenValidator = jwtTokenValidator;
     }
 
 
@@ -40,12 +40,12 @@ public class UserController {
     }
 
     @GetMapping("/getUserByUserId")
-    public ResponseEntity<?> getUserById(@RequestHeader("Authorization") String authorizationHeader, String userId) {
-        return ResponseEntity.ok(userSerivce.getUserById(userId == null ? jwtTokenValidator.getUserIdFromToken(jwtTokenValidator.extractJwtToken(authorizationHeader)) : userId));
+    public ResponseEntity<?> getUserById(Authentication authentication, String userId) {
+        return ResponseEntity.ok(userSerivce.getUserById(userId == null ? authentication.getName() : userId));
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody  User user) {
+    public ResponseEntity<?> registerUser(@RequestBody @Validated User user) {
         try {
             return ResponseEntity.ok(userSerivce.register(user));
         } catch (DuplicateUserExecption e) {
@@ -54,7 +54,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody LoginForm loginForm) {
+    public ResponseEntity<?> loginUser(@RequestBody @Validated LoginForm loginForm) {
         try {
             return ResponseEntity.ok(new ResponseDto<Map<?, ?>>("Login", userSerivce.login(loginForm)));
         } catch (NotFoundUserExecption e) {
@@ -92,7 +92,7 @@ public class UserController {
     }
 
     @PutMapping("/updateUser")
-    public ResponseEntity<Map<String, String>> updateUser(@RequestBody User user){
+    public ResponseEntity<Map<String, String>> updateUser(@RequestBody @Validated User user){
         return ResponseEntity.ok(userSerivce.updateUser(user));
     }
 }

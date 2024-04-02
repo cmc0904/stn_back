@@ -24,4 +24,6 @@ public interface BoardRepository {
 
     void saveFileName(int boardIdx, String fileName);
     List<String> getAllFileNameByBoardIdx(int boardIdx);
+
+    void setPrivate(int pr, int idx);
 }

@@ -28,7 +28,7 @@ public interface MyBatisRepaireRepository extends RepaireRepository{
     @Insert("insert into stn_repair_result(repairIdx, adminId, visitDate) values (#{repairIdx}, #{adminId}, #{visitDate})")
     void insertRepairResult(RepairResult repairResult);
 
-    @Select("SELECT r.idx, r.customerUserId, r.problemTitle, r.problemComment, r.createAt, u.name, u.address, u.email, u.phone, u.gender, rr.adminId, rr.visitDate FROM stn_repair r JOIN stn_users u ON u.userId = r.customerUserId LEFT JOIN stn_repair_result rr ON rr.repairIdx = r.idx WHERE u.userId = #{userId}")
+    @Select("SELECT r.idx, r.customerUserId, r.problemTitle, r.problemComment, r.createAt, u.name, u.address, u.email, u.phone, u.gender, rr.adminId, rr.visitDate, rr.finished FROM stn_repair r JOIN stn_users u ON u.userId = r.customerUserId LEFT JOIN stn_repair_result rr ON rr.repairIdx = r.idx WHERE u.userId = #{userId}")
     List<RepairView> getRepairStatusByUserId(String userId);
 
     @Update("update stn_repair_result set finished = 1 where repairIdx = #{idx}")

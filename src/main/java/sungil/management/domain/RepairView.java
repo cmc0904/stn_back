@@ -1,13 +1,11 @@
 package sungil.management.domain;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
 public class RepairView {
-//    SELECT r.idx, r.customerUserId, r.problemTitle, r.problemComment, r.createAt, u.name, u.address, u.email, u.phone, u.gender, rr.adminId, rr.visitDate
     private int idx;
     private int rIdx;
     private String customerUserId;

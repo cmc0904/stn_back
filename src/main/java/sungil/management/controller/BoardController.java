@@ -4,6 +4,7 @@ import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.apache.tomcat.util.http.parser.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -46,10 +47,10 @@ public class BoardController {
 
     @PostMapping(path = "/postBoard")
     public ResponseEntity<?> postBoard(
-            @RequestParam(value = "flL", required = false) MultipartFile[] files
-            , @RequestParam(value = "title") String title
-            , @RequestParam(value = "content") String content
-            , @RequestParam(value = "isPrivate") String isPrivate
+            @Valid  @RequestParam(value = "flL", required = false) MultipartFile[] files
+            , @Valid @RequestParam(value = "title") String title
+            , @Valid @RequestParam(value = "content") String content
+            , @Valid @RequestParam(value = "isPrivate") String isPrivate
             , Authentication authentication
     ) {
 
@@ -146,6 +147,13 @@ public class BoardController {
     public ResponseEntity<List<String>> getFileNameByBoardIdx(int boardIdx) {
         System.out.println(boardService.getAllFileNameByBoardIdx(boardIdx));
         return ResponseEntity.ok(boardService.getAllFileNameByBoardIdx(boardIdx));
+    }
+
+    @PutMapping("/changePrivate")
+    public ResponseEntity<Map<String, String>> getFileNameByBoardIdx(@RequestBody Map<String, Integer> requestData) {
+        int idx = requestData.get("idx");
+        int pri = requestData.get("pri");
+        return ResponseEntity.ok(boardService.changePrivate(idx, pri));
     }
 
 
