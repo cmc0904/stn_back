@@ -40,6 +40,10 @@ public interface MyBatisBoardRepository extends BoardRepository {
     @Select("select fileName from stn_board_files where boardIdx = #{boardIdx}")
     List<String> getAllFileNameByBoardIdx(int boardIdx);
 
-    @Update("update stn_board set private = #{pr} where idx = #{boardIdx}")
-    void setPrivate(int pr, int boardIdx);
+    @Update("update stn_board set private = #{isPrivate} where idx = #{boardIdx}")
+    void setPrivate(int boardIdx, int isPrivate);
+
+
+    @Select("Select idx as boardIdx, title as boardTitle, detail as boardDetail, writerId, createAt, `private` as isPrivate from stn_board where writerId = #{writerId}")
+    List<Board> getMyBoards(String userId);
 }

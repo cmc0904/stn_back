@@ -132,6 +132,8 @@ public class BoardServiceImpl implements BoardService {
         Map<String, String> map = new HashMap<>();
 
         try {
+            System.out.println(idx);
+            System.out.println(priv);
             boardRepository.setPrivate(idx, priv);
             map.put("result", "EDIT_COMPLETE");
         } catch (Exception e) {
@@ -140,5 +142,11 @@ public class BoardServiceImpl implements BoardService {
         }
 
         return map;
+    }
+
+    @Override
+    public List<Board> getMyBoard(String userId) {
+
+        return boardRepository.getMyBoards(userId);
     }
 }

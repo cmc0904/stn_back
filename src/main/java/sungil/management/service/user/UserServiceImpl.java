@@ -1,6 +1,5 @@
 package sungil.management.service.user;
 
-import com.sun.tools.jconsole.JConsoleContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sungil.management.domain.Role;
@@ -78,7 +77,7 @@ public class UserServiceImpl implements UserSerivce {
     }
 
     @Override
-    public Map addRole(Role role) {
+    public Map<String, Object> addRole(Role role) {
         Map<String, Object> map = new HashMap<>();
         try {
             userRepository.addRole(role);
@@ -97,8 +96,15 @@ public class UserServiceImpl implements UserSerivce {
     }
 
     @Override
-    public List<Integer> getPageNumbers() {
-        return PageNationUtil.getPageNationNumbers(userRepository.getAllUsers(), 5);
+    public List<Integer> getPageNumbers(String type) {
+        if (type.equals("users")) {
+            return PageNationUtil.getPageNationNumbers(userRepository.getAllUsers(), 5);
+        } else if (type.equals("admins")) {
+            return PageNationUtil.getPageNationNumbers(userRepository.getAllAdmins(), 5);
+        } else  {
+            return new ArrayList<Integer>();
+        }
+
     }
 
     @Override
@@ -124,6 +130,13 @@ public class UserServiceImpl implements UserSerivce {
             map.put("result", "FAILED");
         }
         return map;
+    }
+
+    @Override
+    public List<User> getAdminByPageNumber(int pageNumber) {
+        List<User> limitData = userRepository.getAdminsLimit(pageNumber * 5);
+        System.out.println(limitData);
+        return limitData.subList(pageNumber * 5 - 5, limitData.size());
     }
 
 
