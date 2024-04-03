@@ -16,6 +16,8 @@ public interface UserRepository {
     void addRole(Role role);
     void deleteUserByUserId(String userId);
     List<User> getUsersLimit(int limit);
+
+    List<User> getAdminsLimit(int limit);
     List<User> getUserLIKE(String type, String content);
 
     void updateUser(User user);

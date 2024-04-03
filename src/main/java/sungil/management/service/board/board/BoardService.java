@@ -21,4 +21,6 @@ public interface BoardService {
 
     Map<String, String> changePrivate(int idx, int priv);
 
+    List<Board> getMyBoard(String userId);
+
 }

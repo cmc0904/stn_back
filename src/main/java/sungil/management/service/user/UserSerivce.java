@@ -18,10 +18,12 @@ public interface UserSerivce {
     Map<String, Object> addRole(Role role);
     boolean isDuplicateUser(String userId);
 
-    List<Integer> getPageNumbers();
+    List<Integer> getPageNumbers(String type);
 
     List<User> getUserByPageNumber(int pageNumber);
     List<User> search(String type, String content);
 
     Map<String, String> updateUser(User user);
+
+    List<User> getAdminByPageNumber(int pageNumber);
 }

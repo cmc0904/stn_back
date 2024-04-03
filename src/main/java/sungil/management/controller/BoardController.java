@@ -153,7 +153,13 @@ public class BoardController {
     public ResponseEntity<Map<String, String>> getFileNameByBoardIdx(@RequestBody Map<String, Integer> requestData) {
         int idx = requestData.get("idx");
         int pri = requestData.get("pri");
+        System.out.println(requestData);
         return ResponseEntity.ok(boardService.changePrivate(idx, pri));
+    }
+
+    @GetMapping("/getMyBoards")
+    public ResponseEntity<List<Board>> getMyBoards(Authentication authentication) {
+        return ResponseEntity.ok(boardService.getMyBoard(authentication.getName()));
     }
 
 

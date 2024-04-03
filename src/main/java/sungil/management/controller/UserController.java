@@ -11,7 +11,6 @@ import sungil.management.execption.DuplicateUserExecption;
 import sungil.management.execption.NotFoundUserExecption;
 import sungil.management.domain.User;
 import sungil.management.form.LoginForm;
-import sungil.management.jwt.JwtTokenValidator;
 import sungil.management.service.user.UserSerivce;
 
 import java.util.HashMap;
@@ -77,13 +76,19 @@ public class UserController {
     }
 
     @GetMapping("/pageNumbers")
-    public List<Integer> getUserListPageNumbers() {
-        return userSerivce.getPageNumbers();
+    public List<Integer> getUserListPageNumbers(String type) {
+        return userSerivce.getPageNumbers(type);
     }
 
     @GetMapping("/getUsersByPage")
     public List<User> getUsersByPage(int page) {
         return userSerivce.getUserByPageNumber(page);
+    }
+
+    @GetMapping("/getAdminsByPage")
+    public List<User> getAdminByPage(int page) {
+        System.out.println(userSerivce.getAdminByPageNumber(page));
+        return userSerivce.getAdminByPageNumber(page);
     }
 
     @GetMapping("/search")

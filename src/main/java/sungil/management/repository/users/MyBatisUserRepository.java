@@ -40,4 +40,7 @@ public interface MyBatisUserRepository extends UserRepository {
 
     @Update("update stn_users set userId =  #{userId}, password =  #{userPassword}, name =  #{userName}, email =  #{userEmail}, address =  #{userAddress}, phone =  #{userPhone}, gender =  #{userGender} where userId = #{userId}")
     void updateUser(User user);
+
+    @Select("SELECT u.* FROM stn_users u, stn_roles r  where u.userId = r.userId AND r.role = 'Admin' limit #{limit}")
+    List<User> getAdminsLimit(int limit);
 }
