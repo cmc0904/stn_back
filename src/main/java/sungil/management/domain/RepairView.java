@@ -6,8 +6,8 @@ import java.time.LocalDateTime;
 
 @Data
 public class RepairView {
-    private Long idx;
-    private Long rIdx;
+    private Integer idx;
+    private Integer rIdx;
     private String customerUserId;
     private String problemTitle;
     private String problemComment;
