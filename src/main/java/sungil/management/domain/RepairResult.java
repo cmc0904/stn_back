@@ -10,9 +10,9 @@ import java.time.LocalDateTime;
 
 @Data
 public class RepairResult {
-    private int idx;
+    private Long idx;
     @NotNull
-    private Integer repairIdx;
+    private Long repairIdx;
 
     @NotBlank
     private String adminId;
@@ -20,7 +20,7 @@ public class RepairResult {
     @Future
     private LocalDateTime visitDate;
 
-    public RepairResult(int repairIdx, String adminId, LocalDateTime visitDate) {
+    public RepairResult(Long repairIdx, String adminId, LocalDateTime visitDate) {
         this.repairIdx = repairIdx;
         this.adminId = adminId;
         this.visitDate = visitDate;

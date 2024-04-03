@@ -11,7 +11,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 public class Board {
-    private Integer boardIdx;
+    private Long boardIdx;
     @Size(min = 5, max = 20)
     @NotBlank
     private String boardTitle;
