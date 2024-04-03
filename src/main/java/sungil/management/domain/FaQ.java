@@ -10,7 +10,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 public class FaQ {
-    private Integer idx;
+    private Long idx;
     @NotBlank
     @Size(min = 5, max = 50)
     private String question;
