@@ -12,7 +12,7 @@ import java.sql.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RepairRegistration {
-    private Long repairRegistrationIdx;
+    private int repairRegistrationIdx;
     private String customerUserId;
     @NotBlank
     @Size(min = 5, max = 100)

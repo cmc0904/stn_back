@@ -11,9 +11,9 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 public class Comment {
-    private Long commentIdx;
+    private Integer commentIdx;
     @NotNull
-    private Long boardIdx;
+    private Integer boardIdx;
 
     @NotBlank
     @Size(min = 5, max = 50)
