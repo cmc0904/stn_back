@@ -1,5 +1,6 @@
 package sungil.management.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -53,7 +54,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody @Validated LoginForm loginForm) {
+    public ResponseEntity<?> loginUser(@RequestBody @Valid LoginForm loginForm) {
         try {
             return ResponseEntity.ok(new ResponseDto<Map<?, ?>>("Login", userSerivce.login(loginForm)));
         } catch (NotFoundUserExecption e) {
