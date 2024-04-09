@@ -17,15 +17,45 @@
     </resultMap>
 
     <select id="getAllUsers" resultMap="userResult">
-        SELECT * FROM stn_users
+        SELECT * FROM stn_users LIMIT 5 OFFSET #{offset}
     </select>
+
+    <select id="getAllUserTotalLength" resultType ="int">
+        SELECT count(*) FROM stn_users
+    </select>
+
 
     <select id="getUsersLimit" resultMap="userResult">
         SELECT * FROM stn_users LIMIT #{limit}
     </select>
 
-    <select id="getUserLIKE" resultMap="userResult">
-        SELECT * FROM stn_users WHERE ${type} LIKE CONCAT(#{content}, '%')
+    <select id="searchUserBy" resultMap="userResult">
+        SELECT *
+        FROM stn_users
+        <where>
+            <if test='"userId".equals(type)'>
+                userId LIKE CONCAT(#{content}, '%')
+            </if>
+            <if test='"name".equals(type)'>
+                `name` LIKE CONCAT(#{content}, '%')
+            </if>
+        </where>
+
+        LIMIT 5 OFFSET #{offset}
+    </select>
+
+    <select id="searchUserTotalLength" resultType ="int">
+        SELECT count(*)
+        FROM stn_users
+        <where>
+            <if test='"userId".equals(type)'>
+                userId LIKE CONCAT(#{content}, '%')
+            </if>
+            <if test='"name".equals(type)'>
+                `name` LIKE CONCAT(#{content}, '%')
+            </if>
+        </where>
+
     </select>
 
     <select id="getAllAdmins" resultMap="userResult">

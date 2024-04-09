@@ -28,11 +28,12 @@ public class SecurityConfig {
         this.jwtTokenValidator = jwtTokenValidator;
     }
 
+    /*
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring().requestMatchers("/resources/**");
     }
-
+    */
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

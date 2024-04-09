@@ -13,6 +13,7 @@ import sungil.management.execption.NotFoundUserExecption;
 import sungil.management.domain.User;
 import sungil.management.form.LoginForm;
 import sungil.management.service.user.UserSerivce;
+import sungil.management.test.PageVO;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,8 +31,8 @@ public class UserController {
 
 
     @GetMapping("/getAllUsers")
-    public ResponseEntity<List<User>> getAllUsers() {
-        return ResponseEntity.ok(userSerivce.getAllUsers());
+    public ResponseEntity<PageVO<User>> getAllUsers(int currentPage) {
+        return ResponseEntity.ok(userSerivce.getAllUsers(currentPage));
     }
 
     @GetMapping("/getAllAdmins")
@@ -93,8 +94,12 @@ public class UserController {
     }
 
     @GetMapping("/search")
-    public List<User> liveSearch(String type, String content) {
-        return userSerivce.search(type, content);
+    public PageVO<User> liveSearch(String type, String content, Integer currentPage) {
+        System.out.println(type);
+        System.out.println(content);
+        System.out.println(currentPage);
+        return userSerivce.search(type, content, currentPage);
+
     }
 
     @PutMapping("/updateUser")
