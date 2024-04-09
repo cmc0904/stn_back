@@ -1,11 +1,13 @@
 package sungil.management.repository.repair;
 
+import org.apache.ibatis.annotations.Mapper;
 import sungil.management.domain.RepairRegistration;
 import sungil.management.domain.RepairResult;
 import sungil.management.domain.RepairView;
 
 import java.util.List;
 
+@Mapper
 public interface RepaireRepository {
 
     // 접수

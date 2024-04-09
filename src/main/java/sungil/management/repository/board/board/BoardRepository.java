@@ -1,9 +1,11 @@
 package sungil.management.repository.board.board;
 
+import org.apache.ibatis.annotations.Mapper;
 import sungil.management.domain.Board;
 
 import java.util.List;
 
+@Mapper
 public interface BoardRepository {
 
     List<Board> getAllBoard();

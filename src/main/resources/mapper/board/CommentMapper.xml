@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sungil.management.repository.board.comment.MyBatisCommentRepository">
+
+    <select id="getCommnetByBoardIdx" parameterType="java.lang.Integer" resultType="sungil.management.domain.Comment">
+        SELECT bc.idx, bc.boardIdx, bc.comment, u.name AS writerId, bc.createAt AS createAt
+        FROM stn_board_comment bc, stn_users u
+        WHERE bc.boardIdx = #{boardIdx} AND bc.writerId = u.userId
+    </select>
+
+    <insert id="insertComment" parameterType="sungil.management.domain.Comment">
+        INSERT INTO stn_board_comment (boardIdx, comment, writerId, createAt)
+        VALUES (#{boardIdx}, #{comment}, #{writerId}, NOW())
+    </insert>
+
+</mapper>

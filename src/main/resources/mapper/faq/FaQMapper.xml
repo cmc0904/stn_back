@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sungil.management.repository.faq.FaQRepository">
+
+    <select id="getAllFaQ" resultType="sungil.management.domain.FaQ">
+        SELECT * FROM stn_faq
+    </select>
+
+    <select id="getFaQByIdx" parameterType="int" resultType="sungil.management.domain.FaQ">
+        SELECT * FROM stn_faq WHERE idx = #{idx}
+    </select>
+
+    <insert id="insertFaQ" parameterType="sungil.management.domain.FaQ">
+        INSERT INTO stn_faq (idx, question, answer)
+        VALUES (#{idx}, #{question}, #{answer})
+    </insert>
+
+    <delete id="deleteFaQ" parameterType="int">
+        DELETE FROM stn_faq WHERE idx = #{idx}
+    </delete>
+
+    <update id="updateFaQ" parameterType="sungil.management.domain.FaQ">
+        UPDATE stn_faq
+        SET question = #{question}, answer = #{answer}
+        WHERE idx = #{idx}
+    </update>
+
+</mapper>

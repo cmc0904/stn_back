@@ -1,11 +1,13 @@
 package sungil.management.repository.users;
 
+import org.apache.ibatis.annotations.Mapper;
 import sungil.management.domain.Role;
 import sungil.management.domain.User;
 
 import java.util.List;
 import java.util.Optional;
 
+@Mapper
 public interface UserRepository {
     List<User> getAllUsers();
     List<User> getAllAdmins();

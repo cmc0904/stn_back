@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sungil.management.repository.board.board.BoardRepository">
+
+    <select id="getAllBoard" resultType="sungil.management.domain.Board">
+        SELECT idx as boardIdx, title as boardTitle, detail as boardDetail, writerId, createAt
+        FROM stn_board
+        WHERE private = 0
+        ORDER BY createAt DESC
+    </select>
+
+    <select id="getBoardByBoardIdx" parameterType="java.lang.Integer" resultType="sungil.management.domain.Board">
+        SELECT idx as boardIdx, title as boardTitle, detail as boardDetail, writerId, createAt
+        FROM stn_board
+        WHERE idx = #{boardIdx} and private = 0
+    </select>
+
+    <select id="getBoardByWriterId" parameterType="java.lang.String" resultType="sungil.management.domain.Board">
+        SELECT idx as boardIdx, title as boardTitle, detail as boardDetail, writerId, createAt, `private` as isPrivate
+        FROM stn_board
+        WHERE writerId = #{writerId} and private = 0
+    </select>
+
+    <update id="updateBoard" parameterType="sungil.management.domain.Board">
+        UPDATE stn_board
+        SET title = #{boardTitle}, detail = #{boardDetail}
+        WHERE idx = #{boardIdx} and private = 0
+    </update>
+
+    <insert id="insertBoard" parameterType="sungil.management.domain.Board">
+        INSERT INTO stn_board (title, detail, writerId, createAt, `private`)
+        VALUES (#{boardTitle}, #{boardDetail}, #{writerId}, NOW(), #{isPrivate})
+    </insert>
+
+    <delete id="deleteBoard" parameterType="int">
+        DELETE FROM stn_board
+        WHERE idx = #{boardIdx}
+    </delete>
+
+    <select id="getBoardListByPageNum" parameterType="int" resultType="sungil.management.domain.Board">
+        SELECT idx as boardIdx, title as boardTitle, detail as boardDetail, writerId, createAt
+        FROM stn_board
+        WHERE private = 0
+        ORDER BY createAt DESC
+            LIMIT #{limit}
+    </select>
+
+    <select id="findByTitleLIKE" parameterType="java.lang.String" resultType="sungil.management.domain.Board">
+        SELECT idx as boardIdx, title as boardTitle, detail as boardDetail, writerId, createAt
+        FROM stn_board
+        WHERE title LIKE CONCAT('%', #{findContent}, '%') and private = 0
+        ORDER BY createAt DESC
+    </select>
+
+    <select id="findByCreatAt" parameterType="java.lang.String" resultType="sungil.management.domain.Board">
+        SELECT idx as boardIdx, title as boardTitle, detail as boardDetail, writerId, createAt
+        FROM stn_board
+        WHERE DATE_FORMAT(createAt, '%Y-%m-%d') = #{date} and private = 0
+        ORDER BY createAt DESC
+    </select>
+
+    <insert id="saveFileName" parameterType="map">
+        INSERT INTO stn_board_files (boardIdx, fileName)
+        VALUES (#{boardIdx}, #{fileName})
+    </insert>
+
+    <select id="getAllFileNameByBoardIdx" parameterType="int" resultType="java.lang.String">
+        SELECT fileName
+        FROM stn_board_files
+        WHERE boardIdx = #{boardIdx}
+    </select>
+
+    <update id="setPrivate" parameterType="map">
+        UPDATE stn_board
+        SET `private` = #{isPrivate}
+        WHERE idx = #{boardIdx}
+    </update>
+
+    <select id="getMyBoards" parameterType="java.lang.String" resultType="sungil.management.domain.Board">
+        SELECT idx as boardIdx, title as boardTitle, detail as boardDetail, writerId, createAt, `private` as isPrivate
+        FROM stn_board
+        WHERE writerId = #{userId}
+    </select>
+
+</mapper>
