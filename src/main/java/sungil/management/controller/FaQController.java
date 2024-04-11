@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import sungil.management.domain.FaQ;
+import sungil.management.domain.Result;
 import sungil.management.service.faq.FaQService;
 
 import java.util.List;
@@ -33,17 +34,17 @@ public class FaQController {
     }
 
     @PostMapping("/addFaQ")
-    public ResponseEntity<Map<String, String>> addFaQ(@RequestBody @Validated FaQ faQ) {
+    public ResponseEntity<Result> addFaQ(@RequestBody @Validated FaQ faQ) {
         return ResponseEntity.ok(faQService.addFaQ(faQ));
     }
 
     @PutMapping("/updateFaQ")
-    public ResponseEntity<Map<String, String>> updateFaQ(@RequestBody @Validated FaQ faQ) {
+    public ResponseEntity<Result> updateFaQ(@RequestBody @Validated FaQ faQ) {
         return ResponseEntity.ok(faQService.updateFaQ(faQ));
     }
 
     @DeleteMapping("/deleteFaQ")
-    public ResponseEntity<Map<String, String>> deleteFaQ(int idx) {
+    public ResponseEntity<Result> deleteFaQ(int idx) {
         return ResponseEntity.ok(faQService.deleteFaQByIdx(idx));
     }
 }
