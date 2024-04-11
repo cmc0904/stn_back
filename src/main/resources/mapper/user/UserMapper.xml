@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sungil.management.repository.users.UserRepository">
+
+    <resultMap id="userResult" type="sungil.management.domain.User">
+        <id property="userId" column="userId"/>
+        <result property="userPassword" column="password"/>
+        <result property="userName" column="name"/>
+        <result property="userEmail" column="email"/>
+        <result property="userAddress" column="address"/>
+        <result property="userPhone" column="phone"/>
+        <result property="userGender" column="gender"/>
+        <result property="createAt" column="createAt"/>
+    </resultMap>
+
+    <select id="getAllUsers" resultMap="userResult">
+        SELECT * FROM stn_users LIMIT 5 OFFSET #{offset}
+    </select>
+
+    <select id="getAllUserTotalLength" resultType ="int">
+        SELECT count(*) FROM stn_users
+    </select>
+
+
+    <select id="getUsersLimit" resultMap="userResult">
+        SELECT * FROM stn_users LIMIT #{limit}
+    </select>
+
+    <select id="searchUserBy" resultMap="userResult">
+        SELECT *
+        FROM stn_users
+        <where>
+            <if test='"userId".equals(type)'>
+                userId LIKE CONCAT(#{content}, '%')
+            </if>
+            <if test='"name".equals(type)'>
+                `name` LIKE CONCAT(#{content}, '%')
+            </if>
+        </where>
+
+        LIMIT 5 OFFSET #{offset}
+    </select>
+
+    <select id="searchUserTotalLength" resultType ="int">
+        SELECT count(*)
+        FROM stn_users
+        <where>
+            <if test='"userId".equals(type)'>
+                userId LIKE CONCAT(#{content}, '%')
+            </if>
+            <if test='"name".equals(type)'>
+                `name` LIKE CONCAT(#{content}, '%')
+            </if>
+        </where>
+
+    </select>
+
+    <select id="getAllAdmins" resultMap="userResult">
+        SELECT u.* FROM stn_users u, stn_roles r WHERE u.userId = r.userId AND r.role = 'Admin'
+    </select>
+
+    <select id="getUserByUserId" resultMap="userResult">
+        SELECT * FROM stn_users WHERE userId = #{userId}
+    </select>
+
+    <select id="getUserByUserIdAndPassword" resultMap="userResult">
+        SELECT * FROM stn_users WHERE userId = #{userId} AND password = #{password}
+    </select>
+
+    <select id="getRoleByUserId" resultType="java.lang.String">
+        SELECT role FROM stn_roles WHERE userId = #{userId}
+    </select>
+
+    <insert id="insertUser" parameterType="sungil.management.domain.User">
+        INSERT INTO stn_users(userId, password, name, email, address, phone, gender, createAt)
+        VALUES(#{userId}, #{userPassword}, #{userName}, #{userEmail}, #{userAddress}, #{userPhone}, #{userGender}, #{createAt})
+    </insert>
+
+    <insert id="addRole">
+        INSERT INTO stn_roles(userId, role) VALUES(#{userId}, #{role})
+    </insert>
+
+    <delete id="deleteUserByUserId">
+        DELETE FROM stn_users WHERE userId = #{userId}
+    </delete>
+
+    <update id="updateUser" parameterType="sungil.management.domain.User">
+        UPDATE stn_users SET userId = #{userId}, password = #{userPassword},
+        name = #{userName}, email = #{userEmail}, address = #{userAddress},
+        phone = #{userPhone}, gender = #{userGender} WHERE userId = #{userId}
+    </update>
+
+    <select id="getAdminsLimit" resultMap="userResult">
+        SELECT u.* FROM stn_users u, stn_roles r WHERE u.userId = r.userId AND r.role = 'Admin' LIMIT #{limit}
+    </select>
+
+</mapper>

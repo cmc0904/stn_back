@@ -5,12 +5,13 @@ import sungil.management.domain.User;
 import sungil.management.execption.DuplicateUserExecption;
 import sungil.management.execption.NotFoundUserExecption;
 import sungil.management.form.LoginForm;
+import sungil.management.test.PageVO;
 
 import java.util.List;
 import java.util.Map;
 
 public interface UserSerivce {
-    List<User> getAllUsers();
+    PageVO<User> getAllUsers(int currentPage);
     List<User> getAllAdmins();
     Map<String, ?> login(LoginForm loginForm) throws NotFoundUserExecption;
     Map<String, String> register(User user) throws DuplicateUserExecption;
@@ -21,7 +22,7 @@ public interface UserSerivce {
     List<Integer> getPageNumbers(String type);
 
     List<User> getUserByPageNumber(int pageNumber);
-    List<User> search(String type, String content);
+    PageVO<User> search(String type, String content, int currentPage);
 
     Map<String, String> updateUser(User user);
 

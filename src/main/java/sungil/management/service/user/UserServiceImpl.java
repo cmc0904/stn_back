@@ -10,6 +10,7 @@ import sungil.management.form.LoginForm;
 import sungil.management.jwt.JwtTokenProvider;
 import sungil.management.jwt.JwtTokenValidator;
 import sungil.management.repository.users.UserRepository;
+import sungil.management.test.PageVO;
 import sungil.management.utils.PageNationUtil;
 
 import java.util.*;
@@ -27,8 +28,11 @@ public class UserServiceImpl implements UserSerivce {
         this.jwtTokenValidator = jwtTokenValidator;
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.getAllUsers();
+    public PageVO<User> getAllUsers(int currentPage) {
+        List<User> currentPageUsers = userRepository.getAllUsers((currentPage - 1) * 5);
+        int length = userRepository.getAllUserTotalLength();
+
+        return new PageVO<>(length, currentPageUsers);
     }
 
     @Override
@@ -97,13 +101,8 @@ public class UserServiceImpl implements UserSerivce {
 
     @Override
     public List<Integer> getPageNumbers(String type) {
-        if (type.equals("users")) {
-            return PageNationUtil.getPageNationNumbers(userRepository.getAllUsers(), 5);
-        } else if (type.equals("admins")) {
-            return PageNationUtil.getPageNationNumbers(userRepository.getAllAdmins(), 5);
-        } else  {
-            return new ArrayList<Integer>();
-        }
+
+        return new ArrayList<>();
 
     }
 
@@ -114,9 +113,17 @@ public class UserServiceImpl implements UserSerivce {
     }
 
     @Override
-    public List<User> search(String type, String content) {
-        System.out.println(String.format("SELECT * FROM stn_users WHERE %s LIKE '%s'", type, content + '%'));
-        return userRepository.getUserLIKE(type, content );
+    public PageVO<User> search(String type, String content, int currentPage) {
+        try {
+            List<User> searchedUser = userRepository.searchUserBy(type, content, (currentPage - 1) * 5);
+            System.out.println(searchedUser);
+            int totalData = userRepository.searchUserTotalLength(type, content);
+            return new PageVO<>(totalData, searchedUser);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new PageVO<>(0, new ArrayList<>());
+        }
+
     }
 
     @Override

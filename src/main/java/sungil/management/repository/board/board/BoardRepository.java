@@ -1,12 +1,18 @@
 package sungil.management.repository.board.board;
 
+import org.apache.ibatis.annotations.Mapper;
 import sungil.management.domain.Board;
 
 import java.util.List;
 
+@Mapper
 public interface BoardRepository {
 
     List<Board> getAllBoard();
+
+    List<Board> getBoardBy(String type, String content, int offset);
+
+    int count(String type, String content);
 
     Board getBoardByBoardIdx(Integer boardIdx);
 
