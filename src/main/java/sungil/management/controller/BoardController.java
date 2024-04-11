@@ -20,6 +20,7 @@ import sungil.management.jwt.JwtTokenValidator;
 import sungil.management.repository.file.FileRepository;
 import sungil.management.service.board.board.BoardService;
 import sungil.management.service.board.comment.CommentService;
+import sungil.management.test.PageVO;
 
 
 import java.io.*;
@@ -66,8 +67,9 @@ public class BoardController {
     }
 
     @GetMapping("/getAllBoard")
-    public ResponseEntity<?> getAllBoard() {
-        return ResponseEntity.ok(boardService.getAllBoard());
+    public ResponseEntity<PageVO<Board>> getAllBoard(String type, String content, Integer currentPage) {
+        System.out.println(new PageVO<Board>(boardService.getBoardCount(type, content), boardService.getBoardBy(type, content, currentPage)));
+        return ResponseEntity.ok(new PageVO<Board>(boardService.getBoardCount(type, content), boardService.getBoardBy(type, content, currentPage)));
     }
 
     @GetMapping("/getBoardByUserIdx")

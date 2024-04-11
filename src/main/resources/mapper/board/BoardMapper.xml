@@ -12,6 +12,44 @@
         ORDER BY createAt DESC
     </select>
 
+
+    <select id="getBoardBy" resultType="sungil.management.domain.Board">
+        SELECT idx as boardIdx, title as boardTitle, detail as boardDetail, writerId, createAt
+        FROM stn_board
+        <where>
+            <if test='"title".equals(type)'>
+                title LIKE CONCAT(#{content}, '%')
+            </if>
+            <if test='"writerId".equals(type)'>
+                `writerId` = #{content}
+            </if>
+            <if test='"date".equals(type)'>
+                DATE_FORMAT(createAt, '%Y-%m-%d') = DATE_FORMAT(#{content}, '%Y-%m-%d')
+            </if>
+            and `private` = 0
+        </where>
+        ORDER BY createAt DESC
+        LIMIT 5 OFFSET #{offset}
+    </select>
+
+    <select id="count" resultType="int">
+        SELECT count(*)
+        FROM stn_board
+        <where>
+            <if test='"title".equals(type)'>
+                title LIKE CONCAT(#{content}, '%')
+            </if>
+            <if test='"writerId".equals(type)'>
+                `writerId` LIKE CONCAT(#{content}, '%')
+            </if>
+            <if test='"date".equals(type)'>
+                DATE_FORMAT(createAt, '%Y-%m-%d') = DATE_FORMAT(#{content}, '%Y-%m-%d')
+            </if>
+            and `private` = 0
+        </where>
+        ORDER BY createAt DESC
+    </select>
+
     <select id="getBoardByBoardIdx" parameterType="java.lang.Integer" resultType="sungil.management.domain.Board">
         SELECT idx as boardIdx, title as boardTitle, detail as boardDetail, writerId, createAt
         FROM stn_board

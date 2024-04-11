@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface BoardService {
-    List<Board> getAllBoard();
+    List<Board> getBoardBy(String type, String content, int currentPage);
+    int getBoardCount(String type, String content);
+
     Board getBoardByBoardIdx(Integer boardIdx);
     List<Board> getBoardByWriterId(String writerId);
     Map<String, String> updateBoard(Board board);

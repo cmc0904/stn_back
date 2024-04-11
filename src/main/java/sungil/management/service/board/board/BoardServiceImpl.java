@@ -27,8 +27,13 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public List<Board> getAllBoard() {
-        return boardRepository.getAllBoard();
+    public List<Board> getBoardBy(String type, String content, int currentPage) {
+        return boardRepository.getBoardBy(type, content, (currentPage - 1) * 5);
+    }
+
+    @Override
+    public int getBoardCount(String type, String content) {
+        return boardRepository.count(type, content);
     }
 
     @Override
