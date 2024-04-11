@@ -33,6 +33,8 @@ public class JwtTokenValidator {
     }
     public boolean validateToken(String token) {
         try {
+            System.out.println(1);
+            System.out.println(token);
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (Exception e) {
@@ -53,6 +55,8 @@ public class JwtTokenValidator {
 
     public String extractJwtToken(String authorizationHeader) {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            System.out.println(authorizationHeader.substring(7));
+            System.out.println(authorizationHeader);
             return authorizationHeader.substring(7);
         }
         return null; // 적절한 토큰이 없을 경우

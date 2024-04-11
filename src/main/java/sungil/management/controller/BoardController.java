@@ -12,10 +12,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import sungil.management.domain.Board;
 import sungil.management.domain.Comment;
+import sungil.management.domain.ReadBoard;
+import sungil.management.domain.User;
 import sungil.management.jwt.JwtTokenValidator;
 import sungil.management.repository.file.FileRepository;
 import sungil.management.service.board.board.BoardService;
@@ -54,6 +57,8 @@ public class BoardController {
             , @Valid @RequestParam(value = "isPrivate") String isPrivate
             , Authentication authentication
     ) {
+
+        System.out.println(files.length);
 
         Board board = new Board(
                 title
@@ -164,7 +169,10 @@ public class BoardController {
         return ResponseEntity.ok(boardService.getMyBoard(authentication.getName()));
     }
 
-
+    @PutMapping("/readBoard")
+    public ResponseEntity<Map<String, String>> updateUser(@RequestBody ReadBoard readBoard, Authentication authentication){
+        return ResponseEntity.ok(boardService.read(authentication.getName(), readBoard.getBoardIdx()));
+    }
 
 
 }

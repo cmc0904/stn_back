@@ -13,7 +13,7 @@ import java.util.Map;
 public interface UserSerivce {
     PageVO<User> getAllUsers(int currentPage);
     List<User> getAllAdmins();
-    Map<String, ?> login(LoginForm loginForm) throws NotFoundUserExecption;
+    Map<String, Object> login(LoginForm loginForm) throws NotFoundUserExecption;
     Map<String, String> register(User user) throws DuplicateUserExecption;
     Map<String, ?> getUserById(String id);
     Map<String, Object> addRole(Role role);

@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="sungil.management.repository.board.comment.MyBatisCommentRepository">
+<mapper namespace="sungil.management.repository.board.comment.CommentRepository">
 
     <select id="getCommnetByBoardIdx" parameterType="java.lang.Integer" resultType="sungil.management.domain.Comment">
         SELECT bc.idx, bc.boardIdx, bc.comment, u.name AS writerId, bc.createAt AS createAt

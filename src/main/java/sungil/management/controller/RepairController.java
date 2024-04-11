@@ -40,22 +40,9 @@ public class RepairController {
     }
 
     @GetMapping("/getRepairFiltering") // 대기
-    public ResponseEntity<?> getRepairWaitStatus(String type) {
-
-
-        if(type.equals("allData")) {
-            return ResponseEntity.ok(repairService.getAllRepairStatus());
-        } else if (type.equals("waiting")) {
-            return ResponseEntity.ok(repairService.getWaitRepairStatus());
-        }else if (type.equals("willVisit")) {
-            return ResponseEntity.ok(repairService.getExpectedRepairStatus());
-        }else if (type.equals("finished")) {
-            return ResponseEntity.ok(repairService.getEndedRepairStatus());
-        } else {
-            Map<String, String> map = new HashMap<>();
-            map.put("result", "CHECK_TYPE");
-            return ResponseEntity.ok(map);
-        }
+    public ResponseEntity<List<RepairView>> getRepairWaitStatus(String type) {
+        System.out.println(repairService.getDataByType(type));
+        return ResponseEntity.ok(repairService.getDataByType(type));
 
     }
 
@@ -80,6 +67,7 @@ public class RepairController {
         return ResponseEntity.ok(repairService.complete(idx));
     }
 
+
     @PutMapping("/editAdminIdVisitDate")
     public ResponseEntity<Map<String, String>> editAdminIdAndVisitDate(@RequestBody @Validated RepairResult repairResult) {
         return ResponseEntity.ok(repairService.editRegistration(repairResult));
@@ -87,16 +75,9 @@ public class RepairController {
 
     @GetMapping("/searchRepair")
     public ResponseEntity<List<RepairView>> searchRepair(String userId, String type){
+        System.out.println(userId);
         System.out.println(type);
-        if (type.equals("allData")){
-            return ResponseEntity.ok(repairService.allSearchRepair(userId));
-        } else if (type.equals("waiting")) {
-            return ResponseEntity.ok(repairService.waitSearchRepair(userId));
-        } else if (type.equals("willVisit")) {
-            return ResponseEntity.ok(repairService.expectedSearchRepair(userId));
-        } else if (type.equals("finished")) {
-            return ResponseEntity.ok(repairService.endedSearchRepair(userId));
-        }
-        return ResponseEntity.ok(new ArrayList<>());
+        System.out.println(repairService.searchRepairLogsByUserIdAndMode(type, userId));
+        return ResponseEntity.ok(repairService.searchRepairLogsByUserIdAndMode(type, userId));
     }
 }

@@ -32,4 +32,11 @@ public interface RepairService {
     List<RepairView> waitSearchRepair(String userId);
 
 
+    List<RepairView> getDataByType(String type);
+
+
+    List<RepairView> searchRepairLogsByUserIdAndMode(String type, String userId);
+
+
+
 }

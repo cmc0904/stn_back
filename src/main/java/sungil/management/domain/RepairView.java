@@ -1,5 +1,6 @@
 package sungil.management.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ public class RepairView {
     private String customerUserId;
     private String problemTitle;
     private String problemComment;
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm")
     private LocalDateTime createAt;
     private String name;
     private String address;
@@ -19,5 +21,7 @@ public class RepairView {
     private String gender;
     private int finished;
     private String adminId;
+
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm")
     private LocalDateTime visitDate;
 }

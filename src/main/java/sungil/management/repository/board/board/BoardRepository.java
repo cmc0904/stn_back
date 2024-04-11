@@ -34,4 +34,6 @@ public interface BoardRepository {
     void setPrivate(int boardIdx, int isPrivate);
 
     List<Board> getMyBoards(String userId);
+
+    void readBoard(int boardIdx, String reader);
 }

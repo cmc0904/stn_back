@@ -44,5 +44,11 @@ public interface RepaireRepository {
     List<RepairView> waitSearchRepair(String userId);
 
 
+    // 필터링
+    List<RepairView> getRepairDataType(String type);
 
+
+
+    // 필터링 + 유저 아이디로 검색
+    List<RepairView> searchRepair(String type, String userId);
 }

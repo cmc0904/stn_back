@@ -1,6 +1,7 @@
 package sungil.management.service.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import sungil.management.domain.Role;
 import sungil.management.domain.User;
@@ -21,11 +22,14 @@ public class UserServiceImpl implements UserSerivce {
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtTokenValidator jwtTokenValidator;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, JwtTokenProvider jwtTokenProvider, JwtTokenValidator jwtTokenValidator) {
+    public UserServiceImpl(UserRepository userRepository, JwtTokenProvider jwtTokenProvider, JwtTokenValidator jwtTokenValidator, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.jwtTokenProvider = jwtTokenProvider;
         this.jwtTokenValidator = jwtTokenValidator;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public PageVO<User> getAllUsers(int currentPage) {
@@ -40,12 +44,19 @@ public class UserServiceImpl implements UserSerivce {
         return userRepository.getAllAdmins();
     }
 
-    public Map<String, ?> login(LoginForm loginForm) throws NotFoundUserExecption {
-        Optional<User> findUser = userRepository.getUserByUserIdAndPassword(loginForm.getUserId(), loginForm.getPassword());
+    public Map<String, Object> login(LoginForm loginForm) throws NotFoundUserExecption {
+        Optional<User> findUser = userRepository.getUserByUserId(loginForm.getUserId());
+        System.out.println(loginForm.getPassword());
+        System.out.println(passwordEncoder.encode(loginForm.getPassword()));
         Map<String, Object> map = new HashMap<>();
 
-        if(findUser.isPresent()) {
-            User user = findUser.get();
+        if(findUser.isEmpty()) {
+            throw new NotFoundUserExecption();
+        }
+
+        User user = findUser.get();
+
+        if(passwordEncoder.matches(loginForm.getPassword(), user.getUserPassword())) {
             String tk = jwtTokenProvider.generateToken(user, userRepository.getRoleByUserId(user.getUserId()));
             map.put("token", tk);
             map.put("roles", jwtTokenValidator.getUserRolesFromToken(tk));
@@ -53,6 +64,7 @@ public class UserServiceImpl implements UserSerivce {
             return map;
         } else {
             throw new NotFoundUserExecption();
+
         }
     }
 
@@ -61,6 +73,7 @@ public class UserServiceImpl implements UserSerivce {
         Map<String, String> map = new HashMap<>();
 
         if (findUser.isEmpty()) {
+            user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
             userRepository.insertUser(user);
             map.put("result", "REGISTER_COMPLETE");
         } else {
