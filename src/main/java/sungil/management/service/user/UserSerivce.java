@@ -1,5 +1,6 @@
 package sungil.management.service.user;
 
+import sungil.management.domain.Result;
 import sungil.management.domain.Role;
 import sungil.management.domain.User;
 import sungil.management.execption.DuplicateUserExecption;
@@ -14,9 +15,9 @@ public interface UserSerivce {
     PageVO<User> getAllUsers(int currentPage);
     List<User> getAllAdmins();
     Map<String, ?> login(LoginForm loginForm) throws NotFoundUserExecption;
-    Map<String, String> register(User user) throws DuplicateUserExecption;
+    Result register(User user) throws DuplicateUserExecption;
     Map<String, ?> getUserById(String id);
-    Map<String, Object> addRole(Role role);
+    Result addRole(Role role);
     boolean isDuplicateUser(String userId);
 
     List<Integer> getPageNumbers(String type);
@@ -24,7 +25,7 @@ public interface UserSerivce {
     List<User> getUserByPageNumber(int pageNumber);
     PageVO<User> search(String type, String content, int currentPage);
 
-    Map<String, String> updateUser(User user);
+    Result updateUser(User user);
 
     List<User> getAdminByPageNumber(int pageNumber);
 }

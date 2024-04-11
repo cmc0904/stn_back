@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import sungil.management.domain.RepairRegistration;
 import sungil.management.domain.RepairResult;
 import sungil.management.domain.RepairView;
+import sungil.management.domain.Result;
 import sungil.management.jwt.JwtTokenValidator;
 import sungil.management.service.repair.RepairService;
 
@@ -29,7 +30,7 @@ public class RepairController {
 
 
     @PostMapping("/registrationrepair")
-    public ResponseEntity<Map<String, String>> registration(Authentication authentication, @RequestBody @Validated RepairRegistration repairRegistration) {
+    public ResponseEntity<Result> registration(Authentication authentication, @RequestBody @Validated RepairRegistration repairRegistration) {
         repairRegistration.setCustomerUserId(authentication.getName());
         return ResponseEntity.ok(repairService.registrationRepair(repairRegistration));
     }
@@ -67,7 +68,7 @@ public class RepairController {
 
 
     @PostMapping("/processrepair")
-    public ResponseEntity<Map<String, String>> proccessRegistration(@RequestBody @Validated RepairResult repairResult) {
+    public ResponseEntity<Result> proccessRegistration(@RequestBody @Validated RepairResult repairResult) {
         return ResponseEntity.ok(repairService.processRegistration(repairResult));
     }
 
@@ -76,12 +77,12 @@ public class RepairController {
         return ResponseEntity.ok(repairService.getRepairStatusByUserId(userId == null ? authentication.getName() : userId));
     }
     @PostMapping("/completeRepair")
-    public ResponseEntity<Map<String, String>> proccessRegistration(@RequestBody int idx) {
+    public ResponseEntity<Result> proccessRegistration(@RequestBody int idx) {
         return ResponseEntity.ok(repairService.complete(idx));
     }
 
     @PutMapping("/editAdminIdVisitDate")
-    public ResponseEntity<Map<String, String>> editAdminIdAndVisitDate(@RequestBody @Validated RepairResult repairResult) {
+    public ResponseEntity<Result> editAdminIdAndVisitDate(@RequestBody @Validated RepairResult repairResult) {
         return ResponseEntity.ok(repairService.editRegistration(repairResult));
     }
 

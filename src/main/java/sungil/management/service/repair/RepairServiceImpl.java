@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import sungil.management.domain.RepairRegistration;
 import sungil.management.domain.RepairResult;
 import sungil.management.domain.RepairView;
+import sungil.management.domain.Result;
 import sungil.management.repository.repair.RepaireRepository;
 
 import java.util.HashMap;
@@ -22,18 +23,15 @@ public class RepairServiceImpl implements RepairService {
     }
 
     @Override
-    public Map<String, String> registrationRepair(RepairRegistration repairRegistration) {
-        Map<String, String> map = new HashMap<>();
+    public Result registrationRepair(RepairRegistration repairRegistration) {
 
         try {
             repaireRepository.insertRepaire(repairRegistration);
-            map.put("results", "정상적으로 처리되었습니다.");
+            return new Result("정상적으로 처리되었습니다.");
         } catch (Exception e) {
-            map.put("results", "Failed");
+            return new Result("Failed");
         }
 
-
-        return map;
     }
 
     @Override
@@ -61,46 +59,44 @@ public class RepairServiceImpl implements RepairService {
     }
 
     @Override
-    public Map<String, String> processRegistration(RepairResult repairResult) {
-        Map<String, String> map = new HashMap<>();
+    public Result processRegistration(RepairResult repairResult) {
 
         try {
             repaireRepository.insertRepairResult(repairResult);
-            map.put("results", "정상적으로 처리되었습니다.");
+            return new Result("정상적으로 처리되었습니다.");
         } catch (Exception e) {
-            map.put("results", "Failed");
+            return new Result("Failed");
         }
 
 
-        return map;
     }
 
 
 
     @Override
-    public Map<String, String> complete(int idx) {
-        Map<String, String> map = new HashMap<>();
+    public Result complete(int idx) {
+
         try {
             repaireRepository.updateRepairFlagToOne(idx);
-            map.put("result", "COMPLETE");
+            return new Result("COMPLETE");
         } catch (Exception e) {
-            map.put("result", "FAILED");
+            return new Result("FAILED");
         }
 
-        return map;
+
     }
 
     @Override
-    public Map<String, String> editRegistration(RepairResult repairResult) {
-        Map<String, String> map = new HashMap<>();
+    public Result editRegistration(RepairResult repairResult) {
+
         try {
             repaireRepository.updateAdminIdAndVisitTime(repairResult);
-            map.put("result", "COMPLETE");
+            return new Result("COMPLETE");
         } catch (Exception e) {
-            map.put("result", "FAILED");
+            return new Result("FAILED");
         }
 
-        return map;
+
     }
 
     @Override

@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import sungil.management.domain.ResponseDto;
+import sungil.management.domain.Result;
 import sungil.management.domain.Role;
 import sungil.management.execption.DuplicateUserExecption;
 import sungil.management.execption.NotFoundUserExecption;
@@ -64,7 +65,7 @@ public class UserController {
     }
 
     @PostMapping("/addRole")
-    public Map<String, Object> addRole(@RequestBody Role role) {
+    public Result addRole(@RequestBody Role role) {
         return userSerivce.addRole(role);
     }
 
@@ -103,7 +104,7 @@ public class UserController {
     }
 
     @PutMapping("/updateUser")
-    public ResponseEntity<Map<String, String>> updateUser(@RequestBody @Validated User user){
+    public ResponseEntity<Result> updateUser(@RequestBody @Validated User user){
         return ResponseEntity.ok(userSerivce.updateUser(user));
     }
 }

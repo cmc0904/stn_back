@@ -3,6 +3,7 @@ package sungil.management.service.faq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sungil.management.domain.FaQ;
+import sungil.management.domain.Result;
 import sungil.management.repository.faq.FaQRepository;
 
 import java.util.HashMap;
@@ -19,46 +20,39 @@ public class FaQSerivceImpl implements FaQService{
     }
 
     @Override
-    public Map<String, String> addFaQ(FaQ faQ) {
-        Map<String, String> map = new HashMap<>();
-
+    public Result addFaQ(FaQ faQ) {
         try {
             faQRepository.insertFaQ(faQ);
-            map.put("result", "ADD_FAQ_COMPLETE");
+            return new Result("ADD_FAQ_COMPLETE");
         } catch (Exception e) {
-            map.put("result", "FAILED_ADD_FAQ");
+            return new Result("FAILED_ADD_FAQ");
         }
 
-        return map;
+
     }
 
     @Override
-    public Map<String, String> updateFaQ(FaQ faQ) {
-        Map<String, String> map = new HashMap<>();
-
+    public Result updateFaQ(FaQ faQ) {
         try {
             faQRepository.updateFaQ(faQ);
-            map.put("result", "UPDATE_FAQ_COMPLETE");
+            return new Result("UPDATE_FAQ_COMPLETE");
 
         } catch (Exception e) {
-
-            map.put("result", "FAILED_UPDATE_FAQ");
+            return new Result("FAILED_UPDATE_FAQ");
         }
-        return map;
     }
 
     @Override
-    public Map<String, String> deleteFaQByIdx(int idx) {
-        Map<String, String> map = new HashMap<>();
+    public Result deleteFaQByIdx(int idx) {
 
         try {
             faQRepository.deleteFaQ(idx);
-            map.put("result", "DELETE_FAQ_COMPLETE");
+            return new Result("DELETE_FAQ_COMPLETE");
 
         } catch (Exception e) {
-            map.put("result", "FAILED_DELETE_FAQ");
+            return new Result("FAILED_DELETE_FAQ");
         }
-        return map;
+
     }
 
     @Override
