@@ -3,6 +3,7 @@ package sungil.management.service.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import sungil.management.domain.Result;
 import sungil.management.domain.Role;
 import sungil.management.domain.User;
 import sungil.management.execption.DuplicateUserExecption;
@@ -12,7 +13,6 @@ import sungil.management.jwt.JwtTokenProvider;
 import sungil.management.jwt.JwtTokenValidator;
 import sungil.management.repository.users.UserRepository;
 import sungil.management.test.PageVO;
-import sungil.management.utils.PageNationUtil;
 
 import java.util.*;
 
@@ -68,19 +68,19 @@ public class UserServiceImpl implements UserSerivce {
         }
     }
 
-    public Map<String, String> register(User user) throws DuplicateUserExecption {
+    public Result register(User user) throws DuplicateUserExecption {
         Optional<User> findUser = userRepository.getUserByUserId(user.getUserId());
-        Map<String, String> map = new HashMap<>();
+
 
         if (findUser.isEmpty()) {
             user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
             userRepository.insertUser(user);
-            map.put("result", "REGISTER_COMPLETE");
+            return new Result("REGISTER_COMPLETE");
         } else {
             throw new DuplicateUserExecption();
         }
 
-        return map;
+
     }
 
     @Override
@@ -94,15 +94,15 @@ public class UserServiceImpl implements UserSerivce {
     }
 
     @Override
-    public Map<String, Object> addRole(Role role) {
-        Map<String, Object> map = new HashMap<>();
+    public Result addRole(Role role) {
+
         try {
             userRepository.addRole(role);
-            map.put("result", "ADD_ROLE_COMPLETE");
+            return new Result("ADD_ROLE_COMPLETE");
         } catch (Exception e) {
-            map.put("result" , "CAN_NOT_ADD_ROLE");
+            return new Result("CAN_NOT_ADD_ROLE");
         }
-        return map;
+
     }
 
     @Override
@@ -140,16 +140,16 @@ public class UserServiceImpl implements UserSerivce {
     }
 
     @Override
-    public Map<String, String> updateUser(User user) {
-        Map<String, String> map = new HashMap<>();
+    public Result updateUser(User user) {
+
 
         try {
             userRepository.updateUser(user);
-            map.put("result", "UPDATE");
+            return new Result("UPDATE");
         } catch (Exception e ) {
-            map.put("result", "FAILED");
+            return new Result("FAILED");
         }
-        return map;
+
     }
 
     @Override
