@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+
 @Service
 public class RepairServiceImpl implements RepairService {
 
@@ -118,4 +120,17 @@ public class RepairServiceImpl implements RepairService {
     public List<RepairView> waitSearchRepair(String userId) {
         return repaireRepository.waitSearchRepair(userId);
     }
+
+
+    @Override
+    public List<RepairView> getDataByType(String type) {
+        return repaireRepository.getRepairDataType(type);
+    }
+
+
+    @Override
+    public List<RepairView> searchRepairLogsByUserIdAndMode(String type, String userId) {
+        return repaireRepository.searchRepair(type, userId);
+    }
+
 }

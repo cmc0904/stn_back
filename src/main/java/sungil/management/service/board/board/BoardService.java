@@ -25,4 +25,6 @@ public interface BoardService {
 
     List<Board> getMyBoard(String userId);
 
+    Map<String, String> read(String reader, Integer boardIdx);
+
 }

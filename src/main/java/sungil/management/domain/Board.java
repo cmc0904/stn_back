@@ -1,11 +1,13 @@
 package sungil.management.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -20,9 +22,11 @@ public class Board {
     private String boardDetail;
     @Size(min = 4, max = 10)
     private String writerId;
-    private Date createAt;
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm")
+    private LocalDateTime createAt;
     private Integer isPrivate;
     private MultipartFile[] files;
+    private int views;
 
     public Board(String boardTitle, String boardDetail, String writerId, int isPrivate, MultipartFile[] files) {
         this.boardTitle = boardTitle;

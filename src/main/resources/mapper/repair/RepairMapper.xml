@@ -10,16 +10,17 @@
         <result property="customerUserId" column="customerUserId"/>
         <result property="problemTitle" column="problemTitle"/>
         <result property="problemComment" column="problemComment"/>
-        <result property="createAt" column="createAt"/>
+        <result column="createAt" property="createAt" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"/>
         <result property="name" column="name"/>
         <result property="address" column="address"/>
         <result property="email" column="email"/>
         <result property="phone" column="phone"/>
         <result property="gender" column="gender"/>
         <result property="adminId" column="adminId"/>
-        <result property="visitDate" column="visitDate"/>
+        <result column="visitDate" property="visitDate" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"/>
         <result property="finished" column="finished"/>
         <result property="rIdx" column="rIdx"/>
+
     </resultMap>
 
     <insert id="insertRepaire" parameterType="sungil.management.domain.RepairRegistration">
@@ -28,12 +29,69 @@
     </insert>
 
     <select id="getAllRepairStatus" resultMap="repairViewResult">
-        SELECT r.idx, r.customerUserId, r.problemTitle, r.problemComment, r.createAt,
-               u.name, u.address, u.email, u.phone, u.gender, rr.adminId, rr.finished, rr.visitDate, rr.idx as rIdx
+        SELECT r.idx, r.customerUserId, r.problemTitle, r.problemComment, DATE_FORMAT(r.createAt, '%Y-%m-%d %H:%i:%s') as createAt,
+               u.name, u.address, u.email, u.phone, u.gender, rr.adminId, rr.finished, DATE_FORMAT(rr.visitDate, '%Y-%m-%d %H:%i:%s') as visitDate, rr.idx as rIdx
         FROM stn_repair r
                  JOIN stn_users u ON u.userId = r.customerUserId
                  LEFT JOIN stn_repair_result rr ON rr.repairIdx = r.idx
     </select>
+
+    <select id="getRepairDataType" resultMap="repairViewResult">
+        SELECT r.idx, r.customerUserId, r.problemTitle, r.problemComment, DATE_FORMAT(r.createAt, '%Y-%m-%d %H:%i:%s') as createAt,
+               u.name, u.address, u.email, u.phone, u.gender, rr.adminId, rr.finished, DATE_FORMAT(rr.visitDate, '%Y-%m-%d %H:%i:%s') as visitDate, rr.idx as rIdx
+        FROM stn_repair r
+                 JOIN stn_users u ON u.userId = r.customerUserId
+                 LEFT JOIN stn_repair_result rr ON rr.repairIdx = r.idx
+        <if test='!("ALL_DATA".equals(type))'>
+            <where>
+                <if test='"WILL_VISIT".equals(type)'>
+                    rr.adminId IS NOT NULL AND rr.finished = 0
+                </if>
+
+                <if test='"WAITING".equals(type)'>
+                    rr.adminId IS NULL
+                </if>
+
+                <if test='"COMPLETE".equals(type)'>
+                    rr.adminId IS NOT NULL AND rr.finished = 1
+                </if>
+            </where>
+        </if>
+
+    </select>
+
+
+    <select id="searchRepair" resultMap="repairViewResult">
+        SELECT r.idx, r.customerUserId, r.problemTitle, r.problemComment, DATE_FORMAT(r.createAt, '%Y-%m-%d %H:%i:%s') as createAt,
+        u.name, u.address, u.email, u.phone, u.gender, rr.adminId, rr.finished, DATE_FORMAT(rr.visitDate, '%Y-%m-%d %H:%i:%s') as visitDate, rr.idx as rIdx
+        FROM stn_repair r
+        JOIN stn_users u ON u.userId = r.customerUserId
+        LEFT JOIN stn_repair_result rr ON rr.repairIdx = r.idx
+
+        <choose>
+            <when test='!("ALL_DATA".equals(type))'>
+                <where>
+                    <if test='"WILL_VISIT".equals(type)'>
+                        rr.adminId IS NOT NULL AND rr.finished = 0
+                    </if>
+
+                    <if test='"WAITING".equals(type)'>
+                        rr.adminId IS NULL
+                    </if>
+
+                    <if test='"COMPLETE".equals(type)'>
+                        rr.adminId IS NOT NULL AND rr.finished = 1
+                    </if>
+                </where>
+
+                and u.userId = #{userId}
+            </when>
+            <otherwise>
+                where u.userId = #{userId}
+            </otherwise>
+        </choose>
+    </select>
+
 
     <select id="getWaitRepairStatus" resultMap="repairViewResult">
         SELECT r.idx, r.customerUserId, r.problemTitle, r.problemComment, r.createAt,

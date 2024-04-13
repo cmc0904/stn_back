@@ -2,6 +2,7 @@ package sungil.management.service.board.board;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import sungil.management.domain.Board;
 import sungil.management.repository.board.board.BoardRepository;
@@ -63,6 +64,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public Map<String, String> postBoard(Board board) {
         Map<String, String> map = new HashMap<>();
 
@@ -153,5 +155,19 @@ public class BoardServiceImpl implements BoardService {
     public List<Board> getMyBoard(String userId) {
 
         return boardRepository.getMyBoards(userId);
+    }
+
+    @Override
+    public Map<String, String> read(String reader, Integer boardIdx) {
+        Map<String, String> map = new HashMap<>();
+        try {
+            boardRepository.readBoard(boardIdx, reader);
+            map.put("result", "GREAT");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("result", "Failed");
+        }
+        return map;
     }
 }
