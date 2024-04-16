@@ -15,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import sungil.management.jwt.JwtTokenValidator;
 
 import static javax.management.Query.and;
@@ -44,14 +45,24 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable).authorizeRequests()
+        http.csrf(AbstractHttpConfigurer::disable)
+                .addFilterBefore(new JwtTokenFilter(jwtTokenValidator), UsernamePasswordAuthenticationFilter.class)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                .requestMatchers("/api/user/login", "/api/user/register", "/api/user/checkDuplicate").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                    .apply(new JwtConfigurer(jwtTokenValidator));
-        http.sessionManagement(sessionManagement -> sessionManagement
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+                .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers(
+                              "/api/user/login"
+                            , "/api/user/register"
+                            , "/api/user/checkDuplicate"
+                    ).permitAll()
+                            .anyRequest().authenticated();
+
+                }
+
+
+        );
+
 
         return http.build();
     }
