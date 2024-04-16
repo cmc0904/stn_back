@@ -126,7 +126,6 @@ public class BoardController {
 
     @GetMapping("/getFileNames")
     public ResponseEntity<List<String>> getFileNameByBoardIdx(int boardIdx) {
-        System.out.println(boardService.getAllFileNameByBoardIdx(boardIdx));
         return ResponseEntity.ok(boardService.getAllFileNameByBoardIdx(boardIdx));
     }
 

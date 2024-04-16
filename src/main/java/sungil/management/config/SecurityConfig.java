@@ -23,7 +23,6 @@ import static javax.management.Query.and;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
     private final JwtTokenValidator jwtTokenValidator;
 
     @Autowired
@@ -48,8 +47,6 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(new JwtTokenFilter(jwtTokenValidator), UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
-
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers(
                               "/api/user/login"
@@ -59,10 +56,7 @@ public class SecurityConfig {
                             .anyRequest().authenticated();
 
                 }
-
-
         );
-
 
         return http.build();
     }

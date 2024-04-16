@@ -1,7 +1,10 @@
 package sungil.management.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
@@ -24,6 +27,7 @@ import sungil.management.vo.user.UserVO;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/user")
@@ -59,8 +63,11 @@ public class UserController {
 
     // 로그인
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody @Valid LoginDTO loginDTO) throws NotFoundUserExecption {
-        return ResponseEntity.ok(new ResponseDto<Map<?, ?>>("Login", userSerivce.login(loginDTO)));
+    public ResponseEntity<?> loginUser(@RequestBody @Valid LoginDTO loginDTO, HttpServletResponse response) throws NotFoundUserExecption {
+        Map<String, ?> login = userSerivce.login(loginDTO);
+
+        return ResponseEntity.ok()
+                .body(new ResponseDto<Map<?, ?>>("Login", login));
     }
 
     @PostMapping("/addRole")
@@ -85,5 +92,11 @@ public class UserController {
     @PutMapping("/updateUser")
     public ResponseEntity<Result> updateUser(@RequestBody @Validated UserDTO userDTO) throws UpdateFailedExecption {
         return ResponseEntity.ok(userSerivce.updateUser(userDTO));
+    }
+
+
+    @GetMapping("/checkVaildJWT")
+    public Result check() {
+        return new Result("JWT_CHECKED");
     }
 }
