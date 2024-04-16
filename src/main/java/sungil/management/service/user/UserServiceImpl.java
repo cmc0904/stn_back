@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import sungil.management.dto.user.RoleDTO;
+import sungil.management.execption.CreateFailedExecption;
+import sungil.management.execption.UpdateFailedExecption;
 import sungil.management.vo.etc.Result;
 
 import sungil.management.dto.user.LoginDTO;
@@ -94,13 +96,13 @@ public class UserServiceImpl implements UserSerivce {
     }
 
     @Override
-    public Result addRole(RoleDTO role) {
+    public Result addRole(RoleDTO role) throws CreateFailedExecption {
 
         try {
             userRepository.addRole(role);
             return new Result("ADD_ROLE_COMPLETE");
         } catch (Exception e) {
-            return new Result("CAN_NOT_ADD_ROLE");
+            throw new CreateFailedExecption();
         }
 
     }
@@ -124,12 +126,12 @@ public class UserServiceImpl implements UserSerivce {
     }
 
     @Override
-    public Result updateUser(UserDTO user) {
+    public Result updateUser(UserDTO user) throws UpdateFailedExecption {
         try {
             userRepository.updateUser(user);
             return new Result("UPDATE");
         } catch (Exception e ) {
-            return new Result("FAILED");
+            throw new UpdateFailedExecption();
         }
 
     }

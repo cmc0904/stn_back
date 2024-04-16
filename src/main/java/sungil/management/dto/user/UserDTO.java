@@ -1,11 +1,12 @@
 package sungil.management.dto.user;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import sungil.management.utils.PasswordUtils;
 
 @Getter
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class UserDTO {
     private String userId;
     private String userPassword;

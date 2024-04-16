@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import sungil.management.execption.CreateFailedExecption;
+import sungil.management.execption.UpdateFailedExecption;
 import sungil.management.vo.etc.Result;
 import sungil.management.dto.repair.RepairRequestDTO;
 import sungil.management.dto.repair.RepairResponseDTO;
@@ -27,7 +29,7 @@ public class RepairController {
 
 
     @PostMapping("/registrationrepair")
-    public ResponseEntity<Result> registration(@RequestBody @Validated RepairRequestDTO repairRequestDTO) {
+    public ResponseEntity<Result> registration(@RequestBody @Validated RepairRequestDTO repairRequestDTO) throws CreateFailedExecption {
         return ResponseEntity.ok(repairService.registrationRepair(repairRequestDTO));
     }
 
@@ -39,7 +41,7 @@ public class RepairController {
     }
 
     @PostMapping("/processrepair")
-    public ResponseEntity<Result> proccessRegistration(@RequestBody @Validated RepairResponseDTO repairResponseDTO) {
+    public ResponseEntity<Result> proccessRegistration(@RequestBody @Validated RepairResponseDTO repairResponseDTO) throws CreateFailedExecption {
         return ResponseEntity.ok(repairService.processRegistration(repairResponseDTO));
     }
 
@@ -48,13 +50,13 @@ public class RepairController {
         return ResponseEntity.ok(repairService.getRepairStatusByUserId(userId == null ? authentication.getName() : userId));
     }
     @PostMapping("/completeRepair")
-    public ResponseEntity<Result> proccessRegistration(@RequestBody int idx) {
+    public ResponseEntity<Result> proccessRegistration(@RequestBody int idx) throws UpdateFailedExecption {
         return ResponseEntity.ok(repairService.complete(idx));
     }
 
 
     @PutMapping("/editAdminIdVisitDate")
-    public ResponseEntity<Result> editAdminIdAndVisitDate(@RequestBody @Validated UpdateRepairResponseDTO updateRepairResponseDTO) {
+    public ResponseEntity<Result> editAdminIdAndVisitDate(@RequestBody @Validated UpdateRepairResponseDTO updateRepairResponseDTO) throws UpdateFailedExecption {
         return ResponseEntity.ok(repairService.editRegistration(updateRepairResponseDTO));
     }
 

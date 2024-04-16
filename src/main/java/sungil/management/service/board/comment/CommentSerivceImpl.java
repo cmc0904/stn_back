@@ -3,8 +3,10 @@ package sungil.management.service.board.comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sungil.management.dto.board.CommentDTO;
+import sungil.management.execption.CreateFailedExecption;
 import sungil.management.repository.board.comment.CommentRepository;
 import sungil.management.vo.board.CommentVO;
+import sungil.management.vo.etc.Result;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,15 +23,14 @@ public class CommentSerivceImpl implements CommentService{
     }
 
     @Override
-    public Map<String, String> addComment(CommentDTO commentDTO) {
-        Map<String, String> map = new HashMap<>();
+    public Result addComment(CommentDTO commentDTO) throws CreateFailedExecption {
         try {
             commentRepository.insertComment(commentDTO);
-            map.put("result", "ADD_COMMENT_COMPLETE");
+            return new Result("ADD_COMMENT_COMPLETE");
         } catch (Exception e) {
-            map.put("result", "FAIL_ADD_COMMENT");
+            throw new CreateFailedExecption();
         }
-        return map;
+
     }
 
     @Override

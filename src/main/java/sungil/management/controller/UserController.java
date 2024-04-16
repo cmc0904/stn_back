@@ -7,6 +7,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import sungil.management.dto.user.RoleDTO;
+import sungil.management.execption.CreateFailedExecption;
+import sungil.management.execption.UpdateFailedExecption;
 import sungil.management.vo.etc.ResponseDto;
 import sungil.management.vo.etc.Result;
 
@@ -51,26 +53,18 @@ public class UserController {
 
     // 회원가입
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody @Validated UserDTO userDTO) {
-        try {
-            return ResponseEntity.ok(userSerivce.register(userDTO));
-        } catch (DuplicateUserExecption e) {
-            return ResponseEntity.ok(e);
-        }
+    public ResponseEntity<?> registerUser(@RequestBody @Validated UserDTO userDTO) throws DuplicateUserExecption {
+        return ResponseEntity.ok(userSerivce.register(userDTO));
     }
 
     // 로그인
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody @Valid LoginDTO loginDTO) {
-        try {
-            return ResponseEntity.ok(new ResponseDto<Map<?, ?>>("Login", userSerivce.login(loginDTO)));
-        } catch (NotFoundUserExecption e) {
-            return ResponseEntity.ok(new ResponseDto<String>(e.getMessage(), null));
-        }
+    public ResponseEntity<?> loginUser(@RequestBody @Valid LoginDTO loginDTO) throws NotFoundUserExecption {
+        return ResponseEntity.ok(new ResponseDto<Map<?, ?>>("Login", userSerivce.login(loginDTO)));
     }
 
     @PostMapping("/addRole")
-    public Result addRole(@RequestBody RoleDTO role) {
+    public Result addRole(@RequestBody RoleDTO role) throws CreateFailedExecption {
         return userSerivce.addRole(role);
     }
 
@@ -89,7 +83,7 @@ public class UserController {
     }
 
     @PutMapping("/updateUser")
-    public ResponseEntity<Result> updateUser(@RequestBody @Validated UserDTO userDTO){
+    public ResponseEntity<Result> updateUser(@RequestBody @Validated UserDTO userDTO) throws UpdateFailedExecption {
         return ResponseEntity.ok(userSerivce.updateUser(userDTO));
     }
 }

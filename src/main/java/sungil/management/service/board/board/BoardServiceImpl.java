@@ -5,10 +5,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import sungil.management.dto.board.BoardDTO;
+import sungil.management.execption.CreateFailedExecption;
+import sungil.management.execption.DeleteFailedExecption;
+import sungil.management.execption.UpdateFailedExecption;
 import sungil.management.repository.board.board.BoardRepository;
 
 import sungil.management.repository.file.FileRepository;
 import sungil.management.vo.board.BoardVO;
+import sungil.management.vo.etc.Result;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +24,7 @@ public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
     private final FileRepository fileRepository;
 
-    // 임시
+
     @Autowired
     public BoardServiceImpl(BoardRepository boardRepository, FileRepository fileRepository) {
         this.boardRepository = boardRepository;
@@ -44,30 +48,25 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public List<BoardVO> getBoardByWriterId(String writerId) {
-        System.out.println( boardRepository.getBoardByWriterId(writerId));
         return boardRepository.getBoardByWriterId(writerId);
     }
 
     @Override
-    public Map<String, String> updateBoard(BoardDTO board) {
-        Map<String, String> map = new HashMap<>();
+    public Result updateBoard(BoardDTO board) throws UpdateFailedExecption {
 
         try {
             boardRepository.updateBoard(board);
 
-            map.put("result", "UPDATE_BOARD_COMPLETE");
+            return new Result("UPDATE_BOARD_COMPLETE");
         } catch (Exception e) {
-            map.put("result", "FAILED_UPDATE_BOARD");
+            throw new UpdateFailedExecption();
         }
 
-        return map;
     }
 
     @Override
     @Transactional
-    public Map<String, String> postBoard(BoardDTO boardDTO) {
-        Map<String, String> map = new HashMap<>();
-
+    public Result postBoard(BoardDTO boardDTO) throws CreateFailedExecption {
         try {
             boardRepository.insertBoard(boardDTO);
             if(boardDTO.getFiles() != null) {
@@ -78,27 +77,22 @@ public class BoardServiceImpl implements BoardService {
                 }
             }
 
-            map.put("result", "ADD_BOARD_COMPLETE");
+            return new Result("ADD_BOARD_COMPLETE");
         } catch (Exception e) {
-            e.printStackTrace();
-            map.put("result", "FAILED_ADD_BOARD");
+            throw new CreateFailedExecption();
         }
 
-        return map;
     }
 
     @Override
-    public Map<String, String> deleteBoard(int boardIdx) {
-        Map<String, String> map = new HashMap<>();
-
+    public Result deleteBoard(int boardIdx) throws DeleteFailedExecption {
         try {
             boardRepository.deleteBoard(boardIdx);
-            map.put("result", "DELETE_BOARD_COMPLETE");
+            return new Result("DELETE_BOARD_COMPLETE");
         } catch (Exception e) {
-            map.put("result", "FAILED_DELETE_BOARD");
+            throw new DeleteFailedExecption();
         }
 
-        return map;
     }
 
 
@@ -123,20 +117,15 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Map<String, String> changePrivate(int idx, int priv) {
-        Map<String, String> map = new HashMap<>();
+    public Result changePrivate(int idx, int priv) throws UpdateFailedExecption {
 
         try {
-            System.out.println(idx);
-            System.out.println(priv);
             boardRepository.setPrivate(idx, priv);
-            map.put("result", "EDIT_COMPLETE");
+            return new Result("EDIT_COMPLETE");
         } catch (Exception e) {
-            e.printStackTrace();
-            map.put("result", "FAILED_EDIT");
+            throw new UpdateFailedExecption();
         }
 
-        return map;
     }
 
     @Override
@@ -145,16 +134,12 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Map<String, String> read(String reader, Integer boardIdx) {
-        Map<String, String> map = new HashMap<>();
+    public Result read(String reader, Integer boardIdx) throws CreateFailedExecption {
         try {
             boardRepository.readBoard(boardIdx, reader);
-            map.put("result", "GREAT");
-
+            return new Result("READ_COMPLETE");
         } catch (Exception e) {
-            e.printStackTrace();
-            map.put("result", "Failed");
+            throw new CreateFailedExecption();
         }
-        return map;
     }
 }

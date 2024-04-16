@@ -2,6 +2,8 @@ package sungil.management.service.repair;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sungil.management.execption.CreateFailedExecption;
+import sungil.management.execption.UpdateFailedExecption;
 import sungil.management.vo.etc.Result;
 import sungil.management.dto.repair.RepairRequestDTO;
 import sungil.management.dto.repair.RepairResponseDTO;
@@ -23,13 +25,13 @@ public class RepairServiceImpl implements RepairService {
     }
 
     @Override
-    public Result registrationRepair(RepairRequestDTO repairRequestDTO) {
+    public Result registrationRepair(RepairRequestDTO repairRequestDTO) throws CreateFailedExecption {
 
         try {
             repaireRepository.insertRepaire(repairRequestDTO);
             return new Result("정상적으로 처리되었습니다.");
         } catch (Exception e) {
-            return new Result("Failed");
+            throw new CreateFailedExecption();
         }
 
     }
@@ -40,50 +42,46 @@ public class RepairServiceImpl implements RepairService {
     }
 
     @Override
-    public Result processRegistration(RepairResponseDTO repairResponseDTO) {
+    public Result processRegistration(RepairResponseDTO repairResponseDTO) throws CreateFailedExecption {
 
         try {
             repaireRepository.insertRepairResult(repairResponseDTO);
             return new Result("정상적으로 처리되었습니다.");
         } catch (Exception e) {
-            return new Result("Failed");
+            throw new CreateFailedExecption();
         }
 
 
     }
 
-
-
     @Override
-    public Result complete(int idx) {
+    public Result complete(int idx) throws UpdateFailedExecption {
 
         try {
             repaireRepository.updateRepairFlagToOne(idx);
             return new Result("COMPLETE");
         } catch (Exception e) {
-            return new Result("FAILED");
+            throw new UpdateFailedExecption();
         }
 
 
     }
 
     @Override
-    public Result editRegistration(UpdateRepairResponseDTO updateRepairResponseDTO) {
+    public Result editRegistration(UpdateRepairResponseDTO updateRepairResponseDTO) throws UpdateFailedExecption {
 
         try {
             repaireRepository.updateAdminIdAndVisitTime(updateRepairResponseDTO);
             return new Result("COMPLETE");
         } catch (Exception e) {
-            return new Result("FAILED");
+            throw new UpdateFailedExecption();
         }
-
-
     }
+
     @Override
     public List<RepairVO> getDataByType(String type) {
         return repaireRepository.getRepairDataType(type);
     }
-
 
     @Override
     public List<RepairVO> searchRepairLogsByUserIdAndMode(String type, String userId) {

@@ -1,7 +1,11 @@
 package sungil.management.service.board.board;
 
 import sungil.management.dto.board.BoardDTO;
+import sungil.management.execption.CreateFailedExecption;
+import sungil.management.execption.DeleteFailedExecption;
+import sungil.management.execption.UpdateFailedExecption;
 import sungil.management.vo.board.BoardVO;
+import sungil.management.vo.etc.Result;
 
 import java.util.List;
 import java.util.Map;
@@ -12,20 +16,19 @@ public interface BoardService {
 
     BoardVO getBoardByBoardIdx(Integer boardIdx);
     List<BoardVO> getBoardByWriterId(String writerId);
-    Map<String, String> updateBoard(BoardDTO board);
-    Map<String, String> postBoard(BoardDTO boardDTO);
-    Map<String, String> deleteBoard(int boardIdx);
-
+    Result updateBoard(BoardDTO board) throws UpdateFailedExecption;
+    Result postBoard(BoardDTO boardDTO) throws CreateFailedExecption;
+    Result deleteBoard(int boardIdx) throws DeleteFailedExecption;
 
     List<BoardVO> getBoardByTitle(String content);
     List<BoardVO> getBoardByDate(String date);
 
     List<String> getAllFileNameByBoardIdx(int boardIdx);
 
-    Map<String, String> changePrivate(int idx, int priv);
+    Result changePrivate(int idx, int priv) throws UpdateFailedExecption;
 
     List<BoardVO> getMyBoard(String userId);
 
-    Map<String, String> read(String reader, Integer boardIdx);
+    Result read(String reader, Integer boardIdx) throws CreateFailedExecption;
 
 }

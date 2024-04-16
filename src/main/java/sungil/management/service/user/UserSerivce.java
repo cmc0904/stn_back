@@ -1,6 +1,8 @@
 package sungil.management.service.user;
 
 import sungil.management.dto.user.RoleDTO;
+import sungil.management.execption.CreateFailedExecption;
+import sungil.management.execption.UpdateFailedExecption;
 import sungil.management.vo.etc.Result;
 
 import sungil.management.dto.user.LoginDTO;
@@ -19,9 +21,9 @@ public interface UserSerivce {
     Map<String, ?> login(LoginDTO loginDTO) throws NotFoundUserExecption;
     Result register(UserDTO userDTO) throws DuplicateUserExecption;
     Map<String, ?> getUserById(String id);
-    Result addRole(RoleDTO role);
+    Result addRole(RoleDTO role) throws CreateFailedExecption;
     boolean isDuplicateUser(String userId);
     PageVO<UserVO> search(String type, String content, int currentPage);
-    Result updateUser(UserDTO userDTO);
+    Result updateUser(UserDTO userDTO) throws UpdateFailedExecption;
 
 }

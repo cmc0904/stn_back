@@ -11,12 +11,16 @@ import org.springframework.web.multipart.MultipartFile;
 import sungil.management.dto.board.ReadBoard;
 import sungil.management.dto.board.BoardDTO;
 import sungil.management.dto.board.CommentDTO;
+import sungil.management.execption.CreateFailedExecption;
+import sungil.management.execption.DeleteFailedExecption;
+import sungil.management.execption.UpdateFailedExecption;
 import sungil.management.repository.file.FileRepository;
 import sungil.management.service.board.board.BoardService;
 import sungil.management.service.board.comment.CommentService;
 import sungil.management.vo.board.BoardVO;
 import sungil.management.vo.board.CommentVO;
 import sungil.management.vo.etc.PageVO;
+import sungil.management.vo.etc.Result;
 
 
 import java.io.*;
@@ -39,12 +43,12 @@ public class BoardController {
     }
 
     @PostMapping(path = "/postBoard")
-    public ResponseEntity<?> postBoard(
+    public ResponseEntity<Result> postBoard(
             @Valid  @RequestParam(value = "flL", required = false) MultipartFile[] files
             , @Valid @RequestParam(value = "title") String title
             , @Valid @RequestParam(value = "content") String content
             , @Valid @RequestParam(value = "isPrivate") Integer isPrivate
-    ) {
+    ) throws CreateFailedExecption {
 
         BoardDTO boardDTO = new BoardDTO(title, content, isPrivate, files);
 
@@ -53,7 +57,6 @@ public class BoardController {
 
     @GetMapping("/getAllBoard")
     public ResponseEntity<PageVO<BoardVO>> getAllBoard(String type, String content, Integer currentPage) {
-        System.out.println(new PageVO<BoardVO>(boardService.getBoardCount(type, content), boardService.getBoardBy(type, content, currentPage)));
         return ResponseEntity.ok(new PageVO<BoardVO>(boardService.getBoardCount(type, content), boardService.getBoardBy(type, content, currentPage)));
     }
 
@@ -82,12 +85,12 @@ public class BoardController {
     }
 
     @PutMapping("/updateBoard")
-    public ResponseEntity<Map<String, String>> updateBoard(@RequestBody BoardDTO board) {
+    public ResponseEntity<Result> updateBoard(@RequestBody BoardDTO board) throws UpdateFailedExecption {
         return ResponseEntity.ok(boardService.updateBoard(board));
     }
 
     @DeleteMapping("/deleteBoard")
-    public ResponseEntity<Map<String, String>> deleteBoard(Integer boardIdx) {
+    public ResponseEntity<Result> deleteBoard(Integer boardIdx) throws DeleteFailedExecption {
         return ResponseEntity.ok(boardService.deleteBoard(boardIdx));
     }
 
@@ -98,7 +101,7 @@ public class BoardController {
     }
 
     @PostMapping("/addComment")
-    public ResponseEntity<Map<String, String>> addComment(@RequestBody CommentDTO commentDTO) {
+    public ResponseEntity<Result> addComment(@RequestBody CommentDTO commentDTO) throws CreateFailedExecption {
         return ResponseEntity.ok(commentService.addComment(commentDTO));
     }
 
@@ -128,11 +131,8 @@ public class BoardController {
     }
 
     @PutMapping("/changePrivate")
-    public ResponseEntity<Map<String, String>> getFileNameByBoardIdx(@RequestBody Map<String, Integer> requestData) {
-        int idx = requestData.get("idx");
-        int pri = requestData.get("pri");
-        System.out.println(requestData);
-        return ResponseEntity.ok(boardService.changePrivate(idx, pri));
+    public ResponseEntity<Result> getFileNameByBoardIdx(@RequestBody Map<String, Integer> requestData) throws UpdateFailedExecption {
+        return ResponseEntity.ok(boardService.changePrivate(requestData.get("idx"), requestData.get("pri")));
     }
 
     @GetMapping("/getMyBoards")
@@ -141,7 +141,7 @@ public class BoardController {
     }
 
     @PutMapping("/readBoard")
-    public ResponseEntity<Map<String, String>> updateUser(@RequestBody ReadBoard readBoard, Authentication authentication){
+    public ResponseEntity<Result> updateUser(@RequestBody ReadBoard readBoard, Authentication authentication) throws CreateFailedExecption {
         return ResponseEntity.ok(boardService.read(authentication.getName(), readBoard.getBoardIdx()));
     }
 

@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import sungil.management.execption.CreateFailedExecption;
+import sungil.management.execption.DeleteFailedExecption;
+import sungil.management.execption.UpdateFailedExecption;
 import sungil.management.vo.etc.Result;
 import sungil.management.dto.faq.FaQDTO;
 import sungil.management.service.faq.FaQService;
@@ -32,17 +35,17 @@ public class FaQController {
     }
 
     @PostMapping("/addFaQ")
-    public ResponseEntity<Result> addFaQ(@RequestBody @Validated FaQDTO faQDTO) {
+    public ResponseEntity<Result> addFaQ(@RequestBody @Validated FaQDTO faQDTO) throws CreateFailedExecption {
         return ResponseEntity.ok(faQService.addFaQ(faQDTO));
     }
 
     @PutMapping("/updateFaQ")
-    public ResponseEntity<Result> updateFaQ(@RequestBody @Validated FaQDTO faQ) {
+    public ResponseEntity<Result> updateFaQ(@RequestBody @Validated FaQDTO faQ) throws UpdateFailedExecption {
         return ResponseEntity.ok(faQService.updateFaQ(faQ));
     }
 
     @DeleteMapping("/deleteFaQ")
-    public ResponseEntity<Result> deleteFaQ(int idx) {
+    public ResponseEntity<Result> deleteFaQ(int idx) throws DeleteFailedExecption {
         return ResponseEntity.ok(faQService.deleteFaQByIdx(idx));
     }
 }

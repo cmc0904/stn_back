@@ -2,6 +2,9 @@ package sungil.management.service.faq;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sungil.management.execption.CreateFailedExecption;
+import sungil.management.execption.DeleteFailedExecption;
+import sungil.management.execption.UpdateFailedExecption;
 import sungil.management.vo.etc.Result;
 import sungil.management.dto.faq.FaQDTO;
 import sungil.management.repository.faq.FaQRepository;
@@ -19,37 +22,35 @@ public class FaQSerivceImpl implements FaQService{
     }
 
     @Override
-    public Result addFaQ(FaQDTO faQDTO) {
+    public Result addFaQ(FaQDTO faQDTO) throws CreateFailedExecption {
         try {
             faQRepository.insertFaQ(faQDTO);
             return new Result("ADD_FAQ_COMPLETE");
         } catch (Exception e) {
-            return new Result("FAILED_ADD_FAQ");
+            throw new CreateFailedExecption();
         }
 
 
     }
 
     @Override
-    public Result updateFaQ(FaQDTO faQDTO) {
+    public Result updateFaQ(FaQDTO faQDTO) throws UpdateFailedExecption {
         try {
             faQRepository.updateFaQ(faQDTO);
             return new Result("UPDATE_FAQ_COMPLETE");
-
         } catch (Exception e) {
-            return new Result("FAILED_UPDATE_FAQ");
+            throw new UpdateFailedExecption();
         }
     }
 
     @Override
-    public Result deleteFaQByIdx(int idx) {
+    public Result deleteFaQByIdx(int idx) throws DeleteFailedExecption {
 
         try {
             faQRepository.deleteFaQ(idx);
             return new Result("DELETE_FAQ_COMPLETE");
-
         } catch (Exception e) {
-            return new Result("FAILED_DELETE_FAQ");
+            throw new DeleteFailedExecption();
         }
 
     }
