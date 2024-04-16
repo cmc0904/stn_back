@@ -1,5 +1,6 @@
 package sungil.management.controller;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +67,12 @@ public class UserController {
     public ResponseEntity<?> loginUser(@RequestBody @Valid LoginDTO loginDTO, HttpServletResponse response) throws NotFoundUserExecption {
         Map<String, ?> login = userSerivce.login(loginDTO);
 
+        Cookie idCookie = new Cookie("token", String.format("%s", (String) login.get("token"))) ;
+        idCookie.setHttpOnly(true);
+        response.addCookie(idCookie);
+
+        response.addCookie(new Cookie("token1", String.format("%s", "asdasdasdadadasd")));
+        //response.addHeader(HttpHeaders.SET_COOKIE, String.format("%s=Bearer %s", idCookie.getName(),idCookie.getValue() ) );
         return ResponseEntity.ok()
                 .body(new ResponseDto<Map<?, ?>>("Login", login));
     }
