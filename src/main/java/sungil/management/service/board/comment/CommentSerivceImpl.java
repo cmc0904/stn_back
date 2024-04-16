@@ -2,8 +2,9 @@ package sungil.management.service.board.comment;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sungil.management.domain.Comment;
+import sungil.management.dto.board.CommentDTO;
 import sungil.management.repository.board.comment.CommentRepository;
+import sungil.management.vo.board.CommentVO;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,10 +21,10 @@ public class CommentSerivceImpl implements CommentService{
     }
 
     @Override
-    public Map<String, String> addComment(Comment comment) {
+    public Map<String, String> addComment(CommentDTO commentDTO) {
         Map<String, String> map = new HashMap<>();
         try {
-            commentRepository.insertComment(comment);
+            commentRepository.insertComment(commentDTO);
             map.put("result", "ADD_COMMENT_COMPLETE");
         } catch (Exception e) {
             map.put("result", "FAIL_ADD_COMMENT");
@@ -32,7 +33,7 @@ public class CommentSerivceImpl implements CommentService{
     }
 
     @Override
-    public List<Comment> getCommentByBoardIdx(int boardIdx) {
+    public List<CommentVO> getCommentByBoardIdx(int boardIdx) {
         return commentRepository.getCommnetByBoardIdx(boardIdx);
     }
 }

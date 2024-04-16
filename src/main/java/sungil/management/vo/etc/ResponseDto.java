@@ -1,4 +1,4 @@
-package sungil.management.domain;
+package sungil.management.vo.etc;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

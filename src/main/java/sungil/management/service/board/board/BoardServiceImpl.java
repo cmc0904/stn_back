@@ -3,12 +3,12 @@ package sungil.management.service.board.board;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-import sungil.management.domain.Board;
+
+import sungil.management.dto.board.BoardDTO;
 import sungil.management.repository.board.board.BoardRepository;
 
 import sungil.management.repository.file.FileRepository;
-import sungil.management.utils.PageNationUtil;
+import sungil.management.vo.board.BoardVO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +28,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public List<Board> getBoardBy(String type, String content, int currentPage) {
+    public List<BoardVO> getBoardBy(String type, String content, int currentPage) {
         return boardRepository.getBoardBy(type, content, (currentPage - 1) * 5);
     }
 
@@ -38,18 +38,18 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Board getBoardByBoardIdx(Integer boardIdx) {
+    public BoardVO getBoardByBoardIdx(Integer boardIdx) {
         return boardRepository.getBoardByBoardIdx(boardIdx);
     }
 
     @Override
-    public List<Board> getBoardByWriterId(String writerId) {
+    public List<BoardVO> getBoardByWriterId(String writerId) {
         System.out.println( boardRepository.getBoardByWriterId(writerId));
         return boardRepository.getBoardByWriterId(writerId);
     }
 
     @Override
-    public Map<String, String> updateBoard(Board board) {
+    public Map<String, String> updateBoard(BoardDTO board) {
         Map<String, String> map = new HashMap<>();
 
         try {
@@ -65,19 +65,16 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public Map<String, String> postBoard(Board board) {
+    public Map<String, String> postBoard(BoardDTO boardDTO) {
         Map<String, String> map = new HashMap<>();
 
         try {
-            String content = board.getBoardDetail();
-            board.setBoardDetail(content.replaceAll("\n", "<br>"));
-            boardRepository.insertBoard(board);
-            System.out.println(board.getBoardIdx());
-            if(board.getFiles() != null) {
-                List<String> fileNames = fileRepository.save(board.getFiles());
+            boardRepository.insertBoard(boardDTO);
+            if(boardDTO.getFiles() != null) {
+                List<String> fileNames = fileRepository.save(boardDTO.getFiles());
 
                 for (String fileName : fileNames) {
-                    boardRepository.saveFileName(board.getBoardIdx(), fileName);
+                    boardRepository.saveFileName(boardDTO.getBoardIdx(), fileName);
                 }
             }
 
@@ -104,19 +101,10 @@ public class BoardServiceImpl implements BoardService {
         return map;
     }
 
-    @Override
-    public List<Board> getBoardListByPageNum(int pageNumber) {
-        List<Board> limitData = boardRepository.getBoardListByPageNum(pageNumber * 5);
-        return limitData.subList(pageNumber * 5 - 5, limitData.size());
-    }
+
 
     @Override
-    public List<Integer> getPageNumbers() {
-        return PageNationUtil.getPageNationNumbers(boardRepository.getAllBoard(), 5);
-    }
-
-    @Override
-    public List<Board> getBoardByTitle(String content) {
+    public List<BoardVO> getBoardByTitle(String content) {
         if(content.isBlank()) {
             return new ArrayList<>();
         }
@@ -124,7 +112,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public List<Board> getBoardByDate(String date) {
+    public List<BoardVO> getBoardByDate(String date) {
         return boardRepository.findByCreatAt(date);
     }
 
@@ -152,8 +140,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public List<Board> getMyBoard(String userId) {
-
+    public List<BoardVO> getMyBoard(String userId) {
         return boardRepository.getMyBoards(userId);
     }
 

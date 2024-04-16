@@ -1,36 +1,25 @@
 package sungil.management.controller;
 
-import jakarta.servlet.ServletContext;
-import jakarta.servlet.ServletOutputStream;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import org.apache.tomcat.util.http.parser.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import sungil.management.domain.Board;
-import sungil.management.domain.Comment;
-import sungil.management.domain.ReadBoard;
-import sungil.management.domain.User;
-import sungil.management.jwt.JwtTokenValidator;
+
+import sungil.management.dto.board.ReadBoard;
+import sungil.management.dto.board.BoardDTO;
+import sungil.management.dto.board.CommentDTO;
 import sungil.management.repository.file.FileRepository;
 import sungil.management.service.board.board.BoardService;
 import sungil.management.service.board.comment.CommentService;
-import sungil.management.test.PageVO;
+import sungil.management.vo.board.BoardVO;
+import sungil.management.vo.board.CommentVO;
+import sungil.management.vo.etc.PageVO;
 
 
 import java.io.*;
-import java.net.URLEncoder;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 @RestController
@@ -54,27 +43,18 @@ public class BoardController {
             @Valid  @RequestParam(value = "flL", required = false) MultipartFile[] files
             , @Valid @RequestParam(value = "title") String title
             , @Valid @RequestParam(value = "content") String content
-            , @Valid @RequestParam(value = "isPrivate") String isPrivate
-            , Authentication authentication
+            , @Valid @RequestParam(value = "isPrivate") Integer isPrivate
     ) {
 
-        System.out.println(files.length);
+        BoardDTO boardDTO = new BoardDTO(title, content, isPrivate, files);
 
-        Board board = new Board(
-                title
-                , content
-                , authentication.getName()
-                , Integer.parseInt(isPrivate)
-                , files
-        );
-
-        return ResponseEntity.ok(boardService.postBoard(board));
+        return ResponseEntity.ok(boardService.postBoard(boardDTO));
     }
 
     @GetMapping("/getAllBoard")
-    public ResponseEntity<PageVO<Board>> getAllBoard(String type, String content, Integer currentPage) {
-        System.out.println(new PageVO<Board>(boardService.getBoardCount(type, content), boardService.getBoardBy(type, content, currentPage)));
-        return ResponseEntity.ok(new PageVO<Board>(boardService.getBoardCount(type, content), boardService.getBoardBy(type, content, currentPage)));
+    public ResponseEntity<PageVO<BoardVO>> getAllBoard(String type, String content, Integer currentPage) {
+        System.out.println(new PageVO<BoardVO>(boardService.getBoardCount(type, content), boardService.getBoardBy(type, content, currentPage)));
+        return ResponseEntity.ok(new PageVO<BoardVO>(boardService.getBoardCount(type, content), boardService.getBoardBy(type, content, currentPage)));
     }
 
     @GetMapping("/getBoardByUserIdx")
@@ -85,24 +65,24 @@ public class BoardController {
 
     @GetMapping("/getBoardByTitle")
     public ResponseEntity<?> getBoardByTitle(String content) {
-        List<Board> finedBoard = boardService.getBoardByTitle(content);
+        List<BoardVO> finedBoard = boardService.getBoardByTitle(content);
 
         return ResponseEntity.ok(finedBoard);
     }
 
 
     @GetMapping("/getBoardByDate")
-    public List<Board> getBoardByDate(String date) {
+    public List<BoardVO> getBoardByDate(String date) {
         return boardService.getBoardByDate(date);
     }
 
     @GetMapping("/getBoardByIdx")
-    public ResponseEntity<Board> getBoardByBoardIdx(Integer boardIdx) {
+    public ResponseEntity<BoardVO> getBoardByBoardIdx(Integer boardIdx) {
         return ResponseEntity.ok(boardService.getBoardByBoardIdx(boardIdx));
     }
 
     @PutMapping("/updateBoard")
-    public ResponseEntity<Map<String, String>> updateBoard(@RequestBody Board board) {
+    public ResponseEntity<Map<String, String>> updateBoard(@RequestBody BoardDTO board) {
         return ResponseEntity.ok(boardService.updateBoard(board));
     }
 
@@ -113,25 +93,16 @@ public class BoardController {
 
 
     @GetMapping("/getComment")
-    public ResponseEntity<List<Comment>> getCommentByBoardIdx(Integer boardIdx) {
+    public ResponseEntity<List<CommentVO>> getCommentByBoardIdx(Integer boardIdx) {
         return ResponseEntity.ok(commentService.getCommentByBoardIdx(boardIdx));
     }
 
     @PostMapping("/addComment")
-    public ResponseEntity<Map<String, String>> addComment(Authentication authentication, @RequestBody Comment comment) {
-        comment.setWriterId(authentication.getName());
-        return ResponseEntity.ok(commentService.addComment(comment));
+    public ResponseEntity<Map<String, String>> addComment(@RequestBody CommentDTO commentDTO) {
+        return ResponseEntity.ok(commentService.addComment(commentDTO));
     }
 
-    @GetMapping("/pageNumbers")
-    public List<Integer> getBoardListPageNumbers() {
-        return boardService.getPageNumbers();
-    }
 
-    @GetMapping("/getBoardByPageNumber")
-    public ResponseEntity<List<Board>> getUsersByPage(int page) {
-        return ResponseEntity.ok(boardService.getBoardListByPageNum(page));
-    }
 
     @GetMapping("/image/download")
     public ResponseEntity<byte[]> downloadImage(String fileName) {
@@ -165,7 +136,7 @@ public class BoardController {
     }
 
     @GetMapping("/getMyBoards")
-    public ResponseEntity<List<Board>> getMyBoards(Authentication authentication) {
+    public ResponseEntity<List<BoardVO>> getMyBoards(Authentication authentication) {
         return ResponseEntity.ok(boardService.getMyBoard(authentication.getName()));
     }
 

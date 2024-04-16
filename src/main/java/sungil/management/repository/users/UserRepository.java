@@ -1,31 +1,30 @@
 package sungil.management.repository.users;
 
 import org.apache.ibatis.annotations.Mapper;
-import sungil.management.domain.Role;
-import sungil.management.domain.User;
+
+import sungil.management.dto.user.RoleDTO;
+import sungil.management.dto.user.UserDTO;
+import sungil.management.vo.user.UserVO;
 
 import java.util.List;
 import java.util.Optional;
 
 @Mapper
 public interface UserRepository {
-    List<User> getAllUsers(int offset);
+    List<UserVO> getAllUsers(int offset);
 
     Integer getAllUserTotalLength();
 
-    List<User> getAllAdmins();
-    Optional<User> getUserByUserId(String userId);
-    Optional<User> getUserByUserIdAndPassword(String userId, String password);
-    void insertUser(User user);
-    List<String> getRoleByUserId(String userId);
-    void addRole(Role role);
-    void deleteUserByUserId(String userId);
-    List<User> getUsersLimit(int limit);
+    List<UserVO> getAllAdmins();
+    Optional<UserVO> getUserByUserId(String userId);
 
-    List<User> getAdminsLimit(int limit);
-    List<User> searchUserBy(String type, String content, int offset);
+    void insertUser(UserDTO user);
+    List<String> getRoleByUserId(String userId);
+    void addRole(RoleDTO role);
+
+    List<UserVO> searchUserBy(String type, String content, int offset);
 
     Integer searchUserTotalLength(String type, String content);
 
-    void updateUser(User user);
+    void updateUser(UserDTO userDTO);
 }

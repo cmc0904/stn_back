@@ -1,31 +1,27 @@
 package sungil.management.service.user;
 
-import sungil.management.domain.Result;
-import sungil.management.domain.Role;
-import sungil.management.domain.User;
+import sungil.management.dto.user.RoleDTO;
+import sungil.management.vo.etc.Result;
+
+import sungil.management.dto.user.LoginDTO;
+import sungil.management.dto.user.UserDTO;
 import sungil.management.execption.DuplicateUserExecption;
 import sungil.management.execption.NotFoundUserExecption;
-import sungil.management.form.LoginForm;
-import sungil.management.test.PageVO;
+import sungil.management.vo.etc.PageVO;
+import sungil.management.vo.user.UserVO;
 
 import java.util.List;
 import java.util.Map;
 
 public interface UserSerivce {
-    PageVO<User> getAllUsers(int currentPage);
-    List<User> getAllAdmins();
-    Map<String, ?> login(LoginForm loginForm) throws NotFoundUserExecption;
-    Result register(User user) throws DuplicateUserExecption;
+    PageVO<UserVO> getAllUsers(int currentPage);
+    List<UserVO> getAllAdmins();
+    Map<String, ?> login(LoginDTO loginDTO) throws NotFoundUserExecption;
+    Result register(UserDTO userDTO) throws DuplicateUserExecption;
     Map<String, ?> getUserById(String id);
-    Result addRole(Role role);
+    Result addRole(RoleDTO role);
     boolean isDuplicateUser(String userId);
+    PageVO<UserVO> search(String type, String content, int currentPage);
+    Result updateUser(UserDTO userDTO);
 
-    List<Integer> getPageNumbers(String type);
-
-    List<User> getUserByPageNumber(int pageNumber);
-    PageVO<User> search(String type, String content, int currentPage);
-
-    Result updateUser(User user);
-
-    List<User> getAdminByPageNumber(int pageNumber);
 }

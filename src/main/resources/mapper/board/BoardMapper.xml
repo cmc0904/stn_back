@@ -6,7 +6,7 @@
 <mapper namespace="sungil.management.repository.board.board.BoardRepository">
 
 
-    <select id="getAllBoard" resultType="sungil.management.domain.Board">
+    <select id="getAllBoard" resultType="sungil.management.vo.board.BoardVO">
         SELECT idx as boardIdx, title as boardTitle, detail as boardDetail, writerId, createAt
         FROM stn_board
         WHERE private = 0
@@ -14,7 +14,7 @@
     </select>
 
 
-    <select id="getBoardBy" resultType="sungil.management.domain.Board">
+    <select id="getBoardBy" resultType="sungil.management.vo.board.BoardVO">
         SELECT idx as boardIdx, title as boardTitle, detail as boardDetail, writerId, DATE_FORMAT(createAt, '%Y-%m-%d %H:%i:%s') as createAt, (select count(*) from stn_board_reader WHERE stn_board.idx = stn_board_reader.boardIdx) AS views
         FROM stn_board
         <where>
@@ -59,25 +59,25 @@
         );
     </update>
 
-    <select id="getBoardByBoardIdx" parameterType="java.lang.Integer" resultType="sungil.management.domain.Board">
+    <select id="getBoardByBoardIdx" parameterType="java.lang.Integer" resultType="sungil.management.vo.board.BoardVO">
         SELECT idx as boardIdx, title as boardTitle, detail as boardDetail, writerId, createAt
         FROM stn_board
         WHERE idx = #{boardIdx} and private = 0
     </select>
 
-    <select id="getBoardByWriterId" parameterType="java.lang.String" resultType="sungil.management.domain.Board">
+    <select id="getBoardByWriterId" parameterType="java.lang.String" resultType="sungil.management.vo.board.BoardVO">
         SELECT idx as boardIdx, title as boardTitle, detail as boardDetail, writerId, createAt, `private` as isPrivate
         FROM stn_board
         WHERE writerId = #{writerId} and private = 0
     </select>
 
-    <update id="updateBoard" parameterType="sungil.management.domain.Board">
+    <update id="updateBoard" parameterType="sungil.management.vo.board.BoardVO">
         UPDATE stn_board
         SET title = #{boardTitle}, detail = #{boardDetail}
         WHERE idx = #{boardIdx} and private = 0
     </update>
 
-    <insert id="insertBoard" parameterType="sungil.management.domain.Board" useGeneratedKeys="true"
+    <insert id="insertBoard" parameterType="sungil.management.vo.board.BoardVO" useGeneratedKeys="true"
             keyProperty="boardIdx" keyColumn="idx">
         INSERT INTO stn_board (title, detail, writerId, createAt, `private`)
         VALUES (#{boardTitle}, #{boardDetail}, #{writerId}, NOW(), #{isPrivate})
@@ -88,7 +88,7 @@
         WHERE idx = #{boardIdx}
     </delete>
 
-    <select id="getBoardListByPageNum" parameterType="int" resultType="sungil.management.domain.Board">
+    <select id="getBoardListByPageNum" parameterType="int" resultType="sungil.management.vo.board.BoardVO">
         SELECT idx as boardIdx, title as boardTitle, detail as boardDetail, writerId, createAt
         FROM stn_board
         WHERE private = 0
@@ -96,14 +96,14 @@
             LIMIT #{limit}
     </select>
 
-    <select id="findByTitleLIKE" parameterType="java.lang.String" resultType="sungil.management.domain.Board">
+    <select id="findByTitleLIKE" parameterType="java.lang.String" resultType="sungil.management.vo.board.BoardVO">
         SELECT idx as boardIdx, title as boardTitle, detail as boardDetail, writerId, createAt
         FROM stn_board
         WHERE title LIKE CONCAT('%', #{findContent}, '%') and private = 0
         ORDER BY createAt DESC
     </select>
 
-    <select id="findByCreatAt" parameterType="java.lang.String" resultType="sungil.management.domain.Board">
+    <select id="findByCreatAt" parameterType="java.lang.String" resultType="sungil.management.vo.board.BoardVO">
         SELECT idx as boardIdx, title as boardTitle, detail as boardDetail, writerId, createAt
         FROM stn_board
         WHERE DATE_FORMAT(createAt, '%Y-%m-%d') = #{date} and private = 0
@@ -127,7 +127,7 @@
         WHERE idx = #{boardIdx}
     </update>
 
-    <select id="getMyBoards" parameterType="java.lang.String" resultType="sungil.management.domain.Board">
+    <select id="getMyBoards" parameterType="java.lang.String" resultType="sungil.management.vo.board.BoardVO">
         SELECT idx as boardIdx, title as boardTitle, detail as boardDetail, writerId, createAt, `private` as isPrivate
         FROM stn_board
         WHERE writerId = #{userId}

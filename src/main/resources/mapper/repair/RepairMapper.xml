@@ -5,7 +5,7 @@
 
 <mapper namespace="sungil.management.repository.repair.RepaireRepository">
 
-    <resultMap id="repairViewResult" type="sungil.management.domain.RepairView">
+    <resultMap id="repairViewResult" type="sungil.management.vo.repair.RepairVO">
         <id property="idx" column="idx"/>
         <result property="customerUserId" column="customerUserId"/>
         <result property="problemTitle" column="problemTitle"/>
@@ -23,7 +23,7 @@
 
     </resultMap>
 
-    <insert id="insertRepaire" parameterType="sungil.management.domain.RepairRegistration">
+    <insert id="insertRepaire" parameterType="sungil.management.dto.repair.RepairResponseDTO">
         insert into stn_repair(customerUserId, problemTitle, problemComment, createAt)
         values (#{customerUserId}, #{problemTitle}, #{problemComment}, NOW())
     </insert>
@@ -93,34 +93,7 @@
     </select>
 
 
-    <select id="getWaitRepairStatus" resultMap="repairViewResult">
-        SELECT r.idx, r.customerUserId, r.problemTitle, r.problemComment, r.createAt,
-               u.name, u.address, u.email, u.phone, u.gender, rr.adminId, rr.visitDate, rr.finished
-        FROM stn_repair r
-                 JOIN stn_users u ON u.userId = r.customerUserId
-                 LEFT JOIN stn_repair_result rr ON rr.repairIdx = r.idx
-        WHERE rr.adminId IS NULL
-    </select>
-
-    <select id="getExpectedRepairStatus" resultMap="repairViewResult">
-        SELECT r.idx, r.customerUserId, r.problemTitle, r.problemComment, r.createAt,
-               u.name, u.address, u.email, u.phone, u.gender, rr.adminId, rr.visitDate, rr.finished
-        FROM stn_repair r
-                 JOIN stn_users u ON u.userId = r.customerUserId
-                 LEFT JOIN stn_repair_result rr ON rr.repairIdx = r.idx
-        WHERE rr.adminId IS NOT NULL AND rr.finished = 0
-    </select>
-
-    <select id="getEndedRepairStatus" resultMap="repairViewResult">
-        SELECT r.idx, r.customerUserId, r.problemTitle, r.problemComment, r.createAt,
-               u.name, u.address, u.email, u.phone, u.gender, rr.adminId, rr.visitDate, rr.finished
-        FROM stn_repair r
-                 JOIN stn_users u ON u.userId = r.customerUserId
-                 LEFT JOIN stn_repair_result rr ON rr.repairIdx = r.idx
-        WHERE rr.adminId IS NOT NULL AND rr.finished = 1
-    </select>
-
-    <insert id="insertRepairResult" parameterType="sungil.management.domain.RepairResult">
+    <insert id="insertRepairResult" parameterType="sungil.management.dto.repair.RepairResponseDTO">
         insert into stn_repair_result(repairIdx, adminId, visitDate)
         values (#{repairIdx}, #{adminId}, #{visitDate})
     </insert>
@@ -138,44 +111,8 @@
         update stn_repair_result set finished = 1 where repairIdx = #{idx}
     </update>
 
-    <update id="updateAdminIdAndVisitTime" parameterType="sungil.management.domain.RepairResult">
-        update stn_repair_result set adminId = #{adminId}, visitDate = #{visitDate} where idx = #{idx}
+    <update id="updateAdminIdAndVisitTime" parameterType="sungil.management.dto.repair.UpdateRepairResponseDTO">
+        update stn_repair_result set adminId = #{adminId}, visitDate = #{visitDate} where idx = #{repairResponseIdx}
     </update>
-
-    <select id="allSearchRepair" resultMap="repairViewResult" parameterType="String">
-        SELECT r.idx, r.customerUserId, r.problemTitle, r.problemComment, r.createAt,
-               u.name, u.address, u.email, u.phone, u.gender, rr.adminId, rr.visitDate, rr.finished, rr.idx as rIdx
-        FROM stn_repair r
-                 JOIN stn_users u ON u.userId = r.customerUserId
-                 LEFT JOIN stn_repair_result rr ON rr.repairIdx = r.idx
-        WHERE r.customerUserID LIKE CONCAT(#{customerUserId}, '%')
-    </select>
-
-    <select id="endedSearchRepair" resultMap="repairViewResult" parameterType="String">
-        SELECT r.idx, r.customerUserId, r.problemTitle, r.problemComment, r.createAt,
-               u.name, u.address, u.email, u.phone, u.gender, rr.adminId, rr.visitDate, rr.finished
-        FROM stn_repair r
-                 JOIN stn_users u ON u.userId = r.customerUserId
-                 LEFT JOIN stn_repair_result rr ON rr.repairIdx = r.idx
-        WHERE r.customerUserID LIKE CONCAT(#{userId}, '%') AND rr.adminId IS NOT NULL AND rr.finished = 1
-    </select>
-
-    <select id="expectedSearchRepair" resultMap="repairViewResult" parameterType="String">
-        SELECT r.idx, r.customerUserId, r.problemTitle, r.problemComment, r.createAt,
-               u.name, u.address, u.email, u.phone, u.gender, rr.adminId, rr.visitDate, rr.finished
-        FROM stn_repair r
-                 JOIN stn_users u ON u.userId = r.customerUserId
-                 LEFT JOIN stn_repair_result rr ON rr.repairIdx = r.idx
-        WHERE r.customerUserID LIKE CONCAT(#{userId}, '%') AND rr.adminId IS NOT NULL AND rr.finished = 0
-    </select>
-
-    <select id="waitSearchRepair" resultMap="repairViewResult" parameterType="String">
-        SELECT r.idx, r.customerUserId, r.problemTitle, r.problemComment, r.createAt,
-               u.name, u.address, u.email, u.phone, u.gender, rr.adminId, rr.visitDate, rr.finished
-        FROM stn_repair r
-                 JOIN stn_users u ON u.userId = r.customerUserId
-                 LEFT JOIN stn_repair_result rr ON rr.repairIdx = r.idx
-        WHERE r.customerUserID LIKE CONCAT(#{userId}, '%') AND rr.adminId IS NULL AND rr.finished IS NULL
-    </select>
 
 </mapper>

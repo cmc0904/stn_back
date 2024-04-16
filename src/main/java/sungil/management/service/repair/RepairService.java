@@ -1,43 +1,21 @@
 package sungil.management.service.repair;
 
-import sungil.management.domain.RepairRegistration;
-import sungil.management.domain.RepairResult;
-import sungil.management.domain.RepairView;
-import sungil.management.domain.Result;
+import sungil.management.vo.etc.Result;
+import sungil.management.dto.repair.RepairRequestDTO;
+import sungil.management.dto.repair.RepairResponseDTO;
+import sungil.management.dto.repair.UpdateRepairResponseDTO;
+import sungil.management.vo.repair.RepairVO;
 
 import java.util.List;
-import java.util.Map;
 
 public interface RepairService {
 
-    Result registrationRepair(RepairRegistration repairRegistration);
-
-    List<RepairView> getAllRepairStatus();
-
-    List<RepairView> getWaitRepairStatus();
-
-    List<RepairView> getExpectedRepairStatus();
-
-    List<RepairView> getEndedRepairStatus();
-
-    List<RepairView> getRepairStatusByUserId(String userId);
-    Result processRegistration(RepairResult repairResult);
+    Result registrationRepair(RepairRequestDTO repairRequestDTO);
+    List<RepairVO> getRepairStatusByUserId(String userId);
+    Result processRegistration(RepairResponseDTO repairResponseDTO);
     Result complete(int idx);
-    Result editRegistration(RepairResult repairResult);
-
-    List<RepairView> allSearchRepair(String userId);
-    List<RepairView> endedSearchRepair(String userId);
-
-    List<RepairView> expectedSearchRepair(String userId);
-
-    List<RepairView> waitSearchRepair(String userId);
-
-
-    List<RepairView> getDataByType(String type);
-
-
-    List<RepairView> searchRepairLogsByUserIdAndMode(String type, String userId);
-
-
+    Result editRegistration(UpdateRepairResponseDTO updateRepairResponseDTO);
+    List<RepairVO> getDataByType(String type);
+    List<RepairVO> searchRepairLogsByUserIdAndMode(String type, String userId);
 
 }

@@ -1,4 +1,4 @@
-package sungil.management.test;
+package sungil.management.vo.etc;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

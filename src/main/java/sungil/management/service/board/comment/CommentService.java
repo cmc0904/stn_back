@@ -1,14 +1,16 @@
 package sungil.management.service.board.comment;
 
-import sungil.management.domain.Comment;
+
+import sungil.management.dto.board.CommentDTO;
+import sungil.management.vo.board.CommentVO;
 
 import java.util.List;
 import java.util.Map;
 
 public interface CommentService {
 
-    Map<String, String> addComment(Comment comment);
+    Map<String, String> addComment(CommentDTO commentDTO);
 
-    List<Comment> getCommentByBoardIdx(int boardIdx);
+    List<CommentVO> getCommentByBoardIdx(int boardIdx);
 
 }

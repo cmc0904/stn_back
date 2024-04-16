@@ -5,7 +5,7 @@
 
 <mapper namespace="sungil.management.repository.users.UserRepository">
 
-    <resultMap id="userResult" type="sungil.management.domain.User">
+    <resultMap id="userResult" type="sungil.management.vo.user.UserVO">
         <id property="userId" column="userId"/>
         <result property="userPassword" column="password"/>
         <result property="userName" column="name"/>
@@ -74,9 +74,9 @@
         SELECT role FROM stn_roles WHERE userId = #{userId}
     </select>
 
-    <insert id="insertUser" parameterType="sungil.management.domain.User">
+    <insert id="insertUser" parameterType="sungil.management.dto.user.UserDTO">
         INSERT INTO stn_users(userId, password, name, email, address, phone, gender, createAt)
-        VALUES(#{userId}, #{userPassword}, #{userName}, #{userEmail}, #{userAddress}, #{userPhone}, #{userGender}, #{createAt})
+        VALUES(#{userId}, #{userPassword}, #{userName}, #{userEmail}, #{userAddress}, #{userPhone}, #{userGender}, NOW())
     </insert>
 
     <insert id="addRole">
@@ -87,7 +87,7 @@
         DELETE FROM stn_users WHERE userId = #{userId}
     </delete>
 
-    <update id="updateUser" parameterType="sungil.management.domain.User">
+    <update id="updateUser" parameterType="sungil.management.dto.user.UserDTO">
         UPDATE stn_users SET userId = #{userId}, password = #{userPassword},
         name = #{userName}, email = #{userEmail}, address = #{userAddress},
         phone = #{userPhone}, gender = #{userGender} WHERE userId = #{userId}

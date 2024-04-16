@@ -1,14 +1,26 @@
 package sungil.management.dto.board;
 
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
+import sungil.management.dto.LoginedUser;
+import sungil.management.dto.user.LoginDTO;
 
 @Getter
-@AllArgsConstructor
-public class BoardDTO {
-    private String title;
-    private String content;
-    private String writerId;
-    private Integer isPrivate;
+public class BoardDTO extends LoginedUser {
+    private Integer boardIdx;
+    private final String boardTitle;
+    private final String boardDetail;
+    private final String writerId;
+    private final Integer isPrivate;
+    private final MultipartFile[] files;
+
+    public BoardDTO(String boardTitle, String boardDetail, Integer isPrivate, MultipartFile[] files) {
+        this.boardTitle = boardTitle;
+        this.boardDetail = boardDetail;
+        this.writerId = super.userId;
+        this.isPrivate = isPrivate;
+        this.files = files;
+    }
 }

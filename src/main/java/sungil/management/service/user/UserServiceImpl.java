@@ -3,16 +3,18 @@ package sungil.management.service.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import sungil.management.domain.Result;
-import sungil.management.domain.Role;
-import sungil.management.domain.User;
+import sungil.management.dto.user.RoleDTO;
+import sungil.management.vo.etc.Result;
+
+import sungil.management.dto.user.LoginDTO;
+import sungil.management.dto.user.UserDTO;
 import sungil.management.execption.DuplicateUserExecption;
 import sungil.management.execption.NotFoundUserExecption;
-import sungil.management.form.LoginForm;
 import sungil.management.jwt.JwtTokenProvider;
 import sungil.management.jwt.JwtTokenValidator;
 import sungil.management.repository.users.UserRepository;
-import sungil.management.test.PageVO;
+import sungil.management.vo.etc.PageVO;
+import sungil.management.vo.user.UserVO;
 
 import java.util.*;
 
@@ -32,31 +34,30 @@ public class UserServiceImpl implements UserSerivce {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public PageVO<User> getAllUsers(int currentPage) {
-        List<User> currentPageUsers = userRepository.getAllUsers((currentPage - 1) * 5);
+    public PageVO<UserVO> getAllUsers(int currentPage) {
+        List<UserVO> currentPageUsers = userRepository.getAllUsers((currentPage - 1) * 5);
         int length = userRepository.getAllUserTotalLength();
 
         return new PageVO<>(length, currentPageUsers);
     }
 
     @Override
-    public List<User> getAllAdmins() {
+    public List<UserVO> getAllAdmins() {
         return userRepository.getAllAdmins();
     }
 
-    public Map<String, Object> login(LoginForm loginForm) throws NotFoundUserExecption {
-        Optional<User> findUser = userRepository.getUserByUserId(loginForm.getUserId());
-        System.out.println(loginForm.getPassword());
-        System.out.println(passwordEncoder.encode(loginForm.getPassword()));
+    @Override
+    public Map<String, Object> login(LoginDTO loginDTO) throws NotFoundUserExecption {
+        Optional<UserVO> findUser = userRepository.getUserByUserId(loginDTO.getUserId());
         Map<String, Object> map = new HashMap<>();
 
         if(findUser.isEmpty()) {
             throw new NotFoundUserExecption();
         }
 
-        User user = findUser.get();
+        UserVO user = findUser.get();
 
-        if(passwordEncoder.matches(loginForm.getPassword(), user.getUserPassword())) {
+        if(passwordEncoder.matches(loginDTO.getPassword(), user.getUserPassword())) {
             String tk = jwtTokenProvider.generateToken(user, userRepository.getRoleByUserId(user.getUserId()));
             map.put("token", tk);
             map.put("roles", jwtTokenValidator.getUserRolesFromToken(tk));
@@ -68,12 +69,11 @@ public class UserServiceImpl implements UserSerivce {
         }
     }
 
-    public Result register(User user) throws DuplicateUserExecption {
-        Optional<User> findUser = userRepository.getUserByUserId(user.getUserId());
-
+    public Result register(UserDTO user) throws DuplicateUserExecption {
+        Optional<UserVO> findUser = userRepository.getUserByUserId(user.getUserId());
 
         if (findUser.isEmpty()) {
-            user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
+            user.encodePassword();
             userRepository.insertUser(user);
             return new Result("REGISTER_COMPLETE");
         } else {
@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserSerivce {
 
     @Override
     public Map<String, ?> getUserById(String id) {
-        Optional<User> findUser = userRepository.getUserByUserId(id);
+        Optional<UserVO> findUser = userRepository.getUserByUserId(id);
 
         Map<String, Object> map = new HashMap<>();
         map.put("result" , findUser.isPresent() ? findUser.get() : "CAN_NOT_FOUND_USER");
@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserSerivce {
     }
 
     @Override
-    public Result addRole(Role role) {
+    public Result addRole(RoleDTO role) {
 
         try {
             userRepository.addRole(role);
@@ -107,42 +107,24 @@ public class UserServiceImpl implements UserSerivce {
 
     @Override
     public boolean isDuplicateUser(String userId) {
-        Optional<User> user = userRepository.getUserByUserId(userId);
-        System.out.println(user);
+        Optional<UserVO> user = userRepository.getUserByUserId(userId);
         return user.isPresent();
     }
 
     @Override
-    public List<Integer> getPageNumbers(String type) {
-
-        return new ArrayList<>();
-
-    }
-
-    @Override
-    public List<User> getUserByPageNumber(int pageNumber) {
-        List<User> limitData = userRepository.getUsersLimit(pageNumber * 5);
-        return limitData.subList(pageNumber * 5 - 5, limitData.size());
-    }
-
-    @Override
-    public PageVO<User> search(String type, String content, int currentPage) {
+    public PageVO<UserVO> search(String type, String content, int currentPage) {
         try {
-            List<User> searchedUser = userRepository.searchUserBy(type, content, (currentPage - 1) * 5);
-            System.out.println(searchedUser);
+            List<UserVO> searchedUser = userRepository.searchUserBy(type, content, (currentPage - 1) * 5);
             int totalData = userRepository.searchUserTotalLength(type, content);
             return new PageVO<>(totalData, searchedUser);
         } catch (Exception e) {
-            e.printStackTrace();
             return new PageVO<>(0, new ArrayList<>());
         }
 
     }
 
     @Override
-    public Result updateUser(User user) {
-
-
+    public Result updateUser(UserDTO user) {
         try {
             userRepository.updateUser(user);
             return new Result("UPDATE");
@@ -152,12 +134,6 @@ public class UserServiceImpl implements UserSerivce {
 
     }
 
-    @Override
-    public List<User> getAdminByPageNumber(int pageNumber) {
-        List<User> limitData = userRepository.getAdminsLimit(pageNumber * 5);
-        System.out.println(limitData);
-        return limitData.subList(pageNumber * 5 - 5, limitData.size());
-    }
 
 
 }

@@ -1,12 +1,15 @@
-package sungil.management.domain;
+package sungil.management.vo.repair;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Data
-public class RepairView {
+public class RepairVO {
     private Integer idx;
     private Integer rIdx;
     private String customerUserId;
@@ -21,7 +24,6 @@ public class RepairView {
     private String gender;
     private int finished;
     private String adminId;
-
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm")
     private LocalDateTime visitDate;
 }

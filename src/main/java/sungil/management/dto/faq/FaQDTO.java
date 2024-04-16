@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class UploadFaQDTO {
-    private Integer faqIdx;
+public class FaQDTO {
+    private Integer idx;
     private String question;
     private String answer;
 }

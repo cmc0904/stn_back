@@ -2,13 +2,12 @@ package sungil.management.service.faq;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sungil.management.domain.FaQ;
-import sungil.management.domain.Result;
+import sungil.management.vo.etc.Result;
+import sungil.management.dto.faq.FaQDTO;
 import sungil.management.repository.faq.FaQRepository;
+import sungil.management.vo.faq.FaQVO;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class FaQSerivceImpl implements FaQService{
@@ -20,9 +19,9 @@ public class FaQSerivceImpl implements FaQService{
     }
 
     @Override
-    public Result addFaQ(FaQ faQ) {
+    public Result addFaQ(FaQDTO faQDTO) {
         try {
-            faQRepository.insertFaQ(faQ);
+            faQRepository.insertFaQ(faQDTO);
             return new Result("ADD_FAQ_COMPLETE");
         } catch (Exception e) {
             return new Result("FAILED_ADD_FAQ");
@@ -32,9 +31,9 @@ public class FaQSerivceImpl implements FaQService{
     }
 
     @Override
-    public Result updateFaQ(FaQ faQ) {
+    public Result updateFaQ(FaQDTO faQDTO) {
         try {
-            faQRepository.updateFaQ(faQ);
+            faQRepository.updateFaQ(faQDTO);
             return new Result("UPDATE_FAQ_COMPLETE");
 
         } catch (Exception e) {
@@ -56,12 +55,12 @@ public class FaQSerivceImpl implements FaQService{
     }
 
     @Override
-    public List<FaQ> getAllFaQ() {
+    public List<FaQVO> getAllFaQ() {
         return faQRepository.getAllFaQ();
     }
 
     @Override
-    public FaQ getFaQByIdx(int idx) {
+    public FaQVO getFaQByIdx(int idx) {
         return faQRepository.getFaQByIdx(idx);
     }
 }

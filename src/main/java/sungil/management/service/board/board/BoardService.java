@@ -1,29 +1,30 @@
 package sungil.management.service.board.board;
 
-import sungil.management.domain.Board;
+import sungil.management.dto.board.BoardDTO;
+import sungil.management.vo.board.BoardVO;
 
 import java.util.List;
 import java.util.Map;
 
 public interface BoardService {
-    List<Board> getBoardBy(String type, String content, int currentPage);
+    List<BoardVO> getBoardBy(String type, String content, int currentPage);
     int getBoardCount(String type, String content);
 
-    Board getBoardByBoardIdx(Integer boardIdx);
-    List<Board> getBoardByWriterId(String writerId);
-    Map<String, String> updateBoard(Board board);
-    Map<String, String> postBoard(Board board);
+    BoardVO getBoardByBoardIdx(Integer boardIdx);
+    List<BoardVO> getBoardByWriterId(String writerId);
+    Map<String, String> updateBoard(BoardDTO board);
+    Map<String, String> postBoard(BoardDTO boardDTO);
     Map<String, String> deleteBoard(int boardIdx);
-    List<Board> getBoardListByPageNum(int pageNumber);
-    List<Integer> getPageNumbers();
-    List<Board> getBoardByTitle(String content);
-    List<Board> getBoardByDate(String date);
+
+
+    List<BoardVO> getBoardByTitle(String content);
+    List<BoardVO> getBoardByDate(String date);
 
     List<String> getAllFileNameByBoardIdx(int boardIdx);
 
     Map<String, String> changePrivate(int idx, int priv);
 
-    List<Board> getMyBoard(String userId);
+    List<BoardVO> getMyBoard(String userId);
 
     Map<String, String> read(String reader, Integer boardIdx);
 

@@ -5,17 +5,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import sungil.management.domain.RepairRegistration;
-import sungil.management.domain.RepairResult;
-import sungil.management.domain.RepairView;
-import sungil.management.domain.Result;
-import sungil.management.jwt.JwtTokenValidator;
+import sungil.management.vo.etc.Result;
+import sungil.management.dto.repair.RepairRequestDTO;
+import sungil.management.dto.repair.RepairResponseDTO;
+import sungil.management.dto.repair.UpdateRepairResponseDTO;
 import sungil.management.service.repair.RepairService;
+import sungil.management.vo.repair.RepairVO;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/repair")
@@ -30,37 +27,24 @@ public class RepairController {
 
 
     @PostMapping("/registrationrepair")
-    public ResponseEntity<Result> registration(Authentication authentication, @RequestBody @Validated RepairRegistration repairRegistration) {
-        repairRegistration.setCustomerUserId(authentication.getName());
-        return ResponseEntity.ok(repairService.registrationRepair(repairRegistration));
-    }
-
-    @GetMapping("/getRepairStatus")
-    public ResponseEntity<List<RepairView>> getRepairStatus() {
-        return ResponseEntity.ok(repairService.getAllRepairStatus());
+    public ResponseEntity<Result> registration(@RequestBody @Validated RepairRequestDTO repairRequestDTO) {
+        return ResponseEntity.ok(repairService.registrationRepair(repairRequestDTO));
     }
 
     @GetMapping("/getRepairFiltering") // 대기
-    public ResponseEntity<List<RepairView>> getRepairWaitStatus(String type) {
+    public ResponseEntity<List<RepairVO>> getRepairWaitStatus(String type) {
         System.out.println(repairService.getDataByType(type));
         return ResponseEntity.ok(repairService.getDataByType(type));
 
     }
 
-
-    @GetMapping("getRepairExpectedStatus") // 예정
-    public ResponseEntity<List<RepairView>> getRepairExpectedStatus() {
-        return ResponseEntity.ok(repairService.getExpectedRepairStatus());
-    }
-
-
     @PostMapping("/processrepair")
-    public ResponseEntity<Result> proccessRegistration(@RequestBody @Validated RepairResult repairResult) {
-        return ResponseEntity.ok(repairService.processRegistration(repairResult));
+    public ResponseEntity<Result> proccessRegistration(@RequestBody @Validated RepairResponseDTO repairResponseDTO) {
+        return ResponseEntity.ok(repairService.processRegistration(repairResponseDTO));
     }
 
     @GetMapping("/getRepairStatusByUserId")
-    public ResponseEntity<List<RepairView>> getRepairStatusBy(Authentication authentication, String userId) {
+    public ResponseEntity<List<RepairVO>> getRepairStatusBy(Authentication authentication, String userId) {
         return ResponseEntity.ok(repairService.getRepairStatusByUserId(userId == null ? authentication.getName() : userId));
     }
     @PostMapping("/completeRepair")
@@ -70,15 +54,12 @@ public class RepairController {
 
 
     @PutMapping("/editAdminIdVisitDate")
-    public ResponseEntity<Result> editAdminIdAndVisitDate(@RequestBody @Validated RepairResult repairResult) {
-        return ResponseEntity.ok(repairService.editRegistration(repairResult));
+    public ResponseEntity<Result> editAdminIdAndVisitDate(@RequestBody @Validated UpdateRepairResponseDTO updateRepairResponseDTO) {
+        return ResponseEntity.ok(repairService.editRegistration(updateRepairResponseDTO));
     }
 
     @GetMapping("/searchRepair")
-    public ResponseEntity<List<RepairView>> searchRepair(String userId, String type){
-        System.out.println(userId);
-        System.out.println(type);
-        System.out.println(repairService.searchRepairLogsByUserIdAndMode(type, userId));
+    public ResponseEntity<List<RepairVO>> searchRepair(String userId, String type){
         return ResponseEntity.ok(repairService.searchRepairLogsByUserIdAndMode(type, userId));
     }
 }

@@ -1,18 +1,22 @@
 package sungil.management.dto.user;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
-import sungil.management.domain.Gender;
+import lombok.RequiredArgsConstructor;
+import sungil.management.utils.PasswordUtils;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserDTO {
     private String userId;
-    private String password;
-    private String name;
-    private String email;
-    private String address;
-    private String phone;
-    private Gender gender;
+    private String userPassword;
+    private String userName;
+    private String userEmail;
+    private String userAddress;
+    private String userPhone;
+    private Gender userGender;
+
+    public void encodePassword() {
+        userPassword = PasswordUtils.passwordEncoder().encode(userPassword);
+    }
+
 }

@@ -2,13 +2,11 @@ package sungil.management.jwt;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import sungil.management.domain.Role;
-import sungil.management.domain.User;
+
+import sungil.management.vo.user.UserVO;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -32,7 +30,7 @@ public class JwtTokenProvider {
         byte[] secretBytes = Base64.getDecoder().decode(jwtSecret);
         this.key = new SecretKeySpec(secretBytes, SignatureAlgorithm.HS512.getJcaName());
     }
-    public String generateToken(User user, List<String> roleList) {
+    public String generateToken(UserVO user, List<String> roleList) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
 

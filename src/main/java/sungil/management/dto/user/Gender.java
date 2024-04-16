@@ -1,4 +1,4 @@
-package sungil.management.domain;
+package sungil.management.dto.user;
 
 
 public enum Gender {

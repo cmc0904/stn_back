@@ -1,28 +1,24 @@
 package sungil.management.controller;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import sungil.management.domain.ResponseDto;
-import sungil.management.domain.Result;
-import sungil.management.domain.Role;
+import sungil.management.dto.user.RoleDTO;
+import sungil.management.vo.etc.ResponseDto;
+import sungil.management.vo.etc.Result;
+
+import sungil.management.dto.user.LoginDTO;
+import sungil.management.dto.user.UserDTO;
 import sungil.management.execption.DuplicateUserExecption;
 import sungil.management.execption.NotFoundUserExecption;
-import sungil.management.domain.User;
-import sungil.management.form.LoginForm;
-import sungil.management.service.user.UserSerivce;
-import sungil.management.test.PageVO;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import sungil.management.service.user.UserSerivce;
+import sungil.management.vo.etc.PageVO;
+import sungil.management.vo.user.UserVO;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,12 +35,12 @@ public class UserController {
 
 
     @GetMapping("/getAllUsers")
-    public ResponseEntity<PageVO<User>> getAllUsers(int currentPage) {
+    public ResponseEntity<PageVO<UserVO>> getAllUsers(int currentPage) {
         return ResponseEntity.ok(userSerivce.getAllUsers(currentPage));
     }
 
     @GetMapping("/getAllAdmins")
-    public ResponseEntity<List<User>> getAllAdmins() {
+    public ResponseEntity<List<UserVO>> getAllAdmins() {
         return ResponseEntity.ok(userSerivce.getAllAdmins());
     }
 
@@ -53,26 +49,28 @@ public class UserController {
         return ResponseEntity.ok(userSerivce.getUserById(userId == null ? authentication.getName() : userId));
     }
 
+    // 회원가입
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody @Validated User user) {
+    public ResponseEntity<?> registerUser(@RequestBody @Validated UserDTO userDTO) {
         try {
-            return ResponseEntity.ok(userSerivce.register(user));
+            return ResponseEntity.ok(userSerivce.register(userDTO));
         } catch (DuplicateUserExecption e) {
             return ResponseEntity.ok(e);
         }
     }
 
+    // 로그인
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody @Valid LoginForm loginForm, HttpServletResponse response) {
+    public ResponseEntity<?> loginUser(@RequestBody @Valid LoginDTO loginDTO) {
         try {
-            return ResponseEntity.ok(new ResponseDto<Map<?, ?>>("Login", userSerivce.login(loginForm)));
+            return ResponseEntity.ok(new ResponseDto<Map<?, ?>>("Login", userSerivce.login(loginDTO)));
         } catch (NotFoundUserExecption e) {
             return ResponseEntity.ok(new ResponseDto<String>(e.getMessage(), null));
         }
     }
 
     @PostMapping("/addRole")
-    public Result addRole(@RequestBody Role role) {
+    public Result addRole(@RequestBody RoleDTO role) {
         return userSerivce.addRole(role);
     }
 
@@ -85,33 +83,13 @@ public class UserController {
         return map;
     }
 
-    @GetMapping("/pageNumbers")
-    public List<Integer> getUserListPageNumbers(String type) {
-        return userSerivce.getPageNumbers(type);
-    }
-
-    @GetMapping("/getUsersByPage")
-    public List<User> getUsersByPage(int page) {
-        return userSerivce.getUserByPageNumber(page);
-    }
-
-    @GetMapping("/getAdminsByPage")
-    public List<User> getAdminByPage(int page) {
-        System.out.println(userSerivce.getAdminByPageNumber(page));
-        return userSerivce.getAdminByPageNumber(page);
-    }
-
     @GetMapping("/search")
-    public PageVO<User> liveSearch(String type, String content, Integer currentPage) {
-        System.out.println(type);
-        System.out.println(content);
-        System.out.println(currentPage);
+    public PageVO<UserVO> liveSearch(String type, String content, Integer currentPage) {
         return userSerivce.search(type, content, currentPage);
-
     }
 
     @PutMapping("/updateUser")
-    public ResponseEntity<Result> updateUser(@RequestBody @Validated User user){
-        return ResponseEntity.ok(userSerivce.updateUser(user));
+    public ResponseEntity<Result> updateUser(@RequestBody @Validated UserDTO userDTO){
+        return ResponseEntity.ok(userSerivce.updateUser(userDTO));
     }
 }

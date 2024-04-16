@@ -5,15 +5,15 @@
 
 <mapper namespace="sungil.management.repository.faq.FaQRepository">
 
-    <select id="getAllFaQ" resultType="sungil.management.domain.FaQ">
+    <select id="getAllFaQ" resultType="sungil.management.vo.faq.FaQVO">
         SELECT * FROM stn_faq
     </select>
 
-    <select id="getFaQByIdx" parameterType="int" resultType="sungil.management.domain.FaQ">
+    <select id="getFaQByIdx" parameterType="int" resultType="sungil.management.vo.faq.FaQVO">
         SELECT * FROM stn_faq WHERE idx = #{idx}
     </select>
 
-    <insert id="insertFaQ" parameterType="sungil.management.domain.FaQ">
+    <insert id="insertFaQ" parameterType="sungil.management.vo.faq.FaQVO">
         INSERT INTO stn_faq (idx, question, answer)
         VALUES (#{idx}, #{question}, #{answer})
     </insert>
@@ -22,7 +22,7 @@
         DELETE FROM stn_faq WHERE idx = #{idx}
     </delete>
 
-    <update id="updateFaQ" parameterType="sungil.management.domain.FaQ">
+    <update id="updateFaQ" parameterType="sungil.management.vo.faq.FaQVO">
         UPDATE stn_faq
         SET question = #{question}, answer = #{answer}
         WHERE idx = #{idx}
