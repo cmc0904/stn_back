@@ -31,6 +31,7 @@ public class RepairServiceImpl implements RepairService {
             repaireRepository.insertRepaire(repairRequestDTO);
             return new Result("정상적으로 처리되었습니다.");
         } catch (Exception e) {
+            e.printStackTrace();
             throw new CreateFailedExecption();
         }
 
@@ -48,6 +49,7 @@ public class RepairServiceImpl implements RepairService {
             repaireRepository.insertRepairResult(repairResponseDTO);
             return new Result("정상적으로 처리되었습니다.");
         } catch (Exception e) {
+            e.printStackTrace();
             throw new CreateFailedExecption();
         }
 

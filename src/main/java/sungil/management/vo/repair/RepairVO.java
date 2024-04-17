@@ -15,7 +15,7 @@ public class RepairVO {
     private String customerUserId;
     private String problemTitle;
     private String problemComment;
-    @JsonFormat(pattern = "yyyy-MM-dd hh:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createAt;
     private String name;
     private String address;
@@ -24,6 +24,6 @@ public class RepairVO {
     private String gender;
     private int finished;
     private String adminId;
-    @JsonFormat(pattern = "yyyy-MM-dd hh:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime visitDate;
 }

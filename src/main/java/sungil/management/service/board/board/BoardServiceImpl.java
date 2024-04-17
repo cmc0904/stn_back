@@ -79,6 +79,7 @@ public class BoardServiceImpl implements BoardService {
 
             return new Result("ADD_BOARD_COMPLETE");
         } catch (Exception e) {
+            e.printStackTrace();
             throw new CreateFailedExecption();
         }
 

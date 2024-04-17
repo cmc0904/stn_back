@@ -4,6 +4,5 @@ import lombok.Data;
 public class FaQVO {
     private Integer idx;
     private String question;
-
     private String answer;
 }

@@ -13,9 +13,7 @@ public class BoardVO {
     @Size(min = 5, max = 20)
     @NotBlank
     private String boardTitle;
-
     private String boardDetail;
-
     private String writerId;
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm")
     private LocalDateTime createAt;

@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import sungil.management.dto.etc.IdxOnlyDTO;
 import sungil.management.execption.CreateFailedExecption;
 import sungil.management.execption.UpdateFailedExecption;
 import sungil.management.vo.etc.Result;
@@ -49,8 +50,9 @@ public class RepairController {
         return ResponseEntity.ok(repairService.getRepairStatusByUserId(userId == null ? authentication.getName() : userId));
     }
     @PostMapping("/completeRepair")
-    public ResponseEntity<Result> proccessRegistration(@RequestBody int idx) throws UpdateFailedExecption {
-        return ResponseEntity.ok(repairService.complete(idx));
+    public ResponseEntity<Result> proccessRegistration(@RequestBody IdxOnlyDTO idx) throws UpdateFailedExecption {
+        System.out.println(idx.getIdx());
+        return ResponseEntity.ok(repairService.complete(idx.getIdx()));
     }
 
 

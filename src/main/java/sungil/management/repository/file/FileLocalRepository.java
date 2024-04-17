@@ -31,7 +31,7 @@ public class FileLocalRepository implements FileRepository {
 
     @Override
     public byte[] getFileByFileName(String fileName) throws IOException {
-        Path filePath = Paths.get("\\home\\stninfo\\imgs\\"+fileName);
+        Path filePath = Paths.get(PATH+fileName);
 
         return Files.readAllBytes(filePath);
     }

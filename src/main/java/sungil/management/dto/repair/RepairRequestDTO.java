@@ -18,6 +18,6 @@ public class RepairRequestDTO extends LoginedUser {
     @Size(min = 5, max = 100)
     private String problemTitle;
     @NotBlank
-    @Size(min = 5, max = 50)
+    @Size(min = 5, max = 100)
     private String problemComment;
 }
