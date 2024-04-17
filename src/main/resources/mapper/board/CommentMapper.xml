@@ -9,6 +9,7 @@
         SELECT bc.idx, bc.boardIdx, bc.comment, u.name AS writerId, bc.createAt AS createAt
         FROM stn_board_comment bc, stn_users u
         WHERE bc.boardIdx = #{boardIdx} AND bc.writerId = u.userId
+        order by bc.createAt desc
     </select>
 
     <insert id="insertComment" parameterType="sungil.management.vo.board.CommentVO">

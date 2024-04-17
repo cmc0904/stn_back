@@ -12,19 +12,17 @@ import java.util.Optional;
 @Mapper
 public interface UserRepository {
     List<UserVO> getAllUsers(int offset);
-
     Integer getAllUserTotalLength();
-
     List<UserVO> getAllAdmins();
     Optional<UserVO> getUserByUserId(String userId);
-
     void insertUser(UserDTO user);
     List<String> getRoleByUserId(String userId);
     void addRole(RoleDTO role);
-
     List<UserVO> searchUserBy(String type, String content, int offset);
-
     Integer searchUserTotalLength(String type, String content);
+
+    List<UserVO> getAdminByPage(int offset);
+    Integer getAdminTotalLength();
 
     void updateUser(UserDTO userDTO);
 }

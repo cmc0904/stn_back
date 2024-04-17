@@ -136,6 +136,13 @@ public class UserServiceImpl implements UserSerivce {
 
     }
 
+    @Override
+    public PageVO<UserVO> getAdminsByPage(int page) {
+        return new PageVO<>(
+            userRepository.getAdminTotalLength()
+            ,userRepository.getAdminByPage((page - 1) * 5)
+        );
+    }
 
 
 }

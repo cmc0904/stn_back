@@ -67,12 +67,15 @@ public class UserController {
     public ResponseEntity<?> loginUser(@RequestBody @Valid LoginDTO loginDTO, HttpServletResponse response) throws NotFoundUserExecption {
         Map<String, ?> login = userSerivce.login(loginDTO);
 
-        Cookie idCookie = new Cookie("token", String.format("%s", (String) login.get("token"))) ;
+        Cookie idCookie = new Cookie(
+                "token"
+                , String.format("%s", (String) login.get("token"))
+        ); ;
         idCookie.setHttpOnly(true);
+        idCookie.setMaxAge(3600000);
+        idCookie.setPath("/");
         response.addCookie(idCookie);
 
-        response.addCookie(new Cookie("token1", String.format("%s", "asdasdasdadadasd")));
-        //response.addHeader(HttpHeaders.SET_COOKIE, String.format("%s=Bearer %s", idCookie.getName(),idCookie.getValue() ) );
         return ResponseEntity.ok()
                 .body(new ResponseDto<Map<?, ?>>("Login", login));
     }
@@ -91,9 +94,27 @@ public class UserController {
         return map;
     }
 
+    @GetMapping("/logout")
+    public void checkDuplicateUser(HttpServletResponse res) {
+        System.out.println(1);
+        Cookie cookie = new Cookie("token", null); // 삭제할 쿠키에 대한 값을 null로 지정
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+
+        cookie.setMaxAge(0); // 유효시간을 0으로 설정해서 바로 만료시킨다.
+        res.addCookie(cookie); // 응답에 추가해서 없어지도록 함
+
+    }
+
     @GetMapping("/search")
     public PageVO<UserVO> liveSearch(String type, String content, Integer currentPage) {
         return userSerivce.search(type, content, currentPage);
+    }
+
+
+    @GetMapping("/getAdminsByPage")
+    public PageVO<UserVO> liveSearch(@RequestParam(defaultValue = "1") int currentPage) {
+        return userSerivce.getAdminsByPage(currentPage);
     }
 
     @PutMapping("/updateUser")

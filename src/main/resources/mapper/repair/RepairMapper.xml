@@ -34,6 +34,7 @@
         FROM stn_repair r
                  JOIN stn_users u ON u.userId = r.customerUserId
                  LEFT JOIN stn_repair_result rr ON rr.repairIdx = r.idx
+        order by r.createAt desc
     </select>
 
     <select id="getRepairDataType" resultMap="repairViewResult">
@@ -57,7 +58,7 @@
                 </if>
             </where>
         </if>
-
+        order by r.createAt  desc
     </select>
 
 
@@ -90,6 +91,7 @@
                 where u.userId = #{userId}
             </otherwise>
         </choose>
+        order by r.createAt desc
     </select>
 
 
@@ -105,6 +107,7 @@
                  JOIN stn_users u ON u.userId = r.customerUserId
                  LEFT JOIN stn_repair_result rr ON rr.repairIdx = r.idx
         WHERE u.userId = #{userId}
+        order by r.createAt desc
     </select>
 
     <update id="updateRepairFlagToOne">
