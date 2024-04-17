@@ -100,7 +100,7 @@
     </delete>
 
     <update id="updateUser" parameterType="sungil.management.dto.user.UserDTO">
-        UPDATE stn_users SET userId = #{userId}, password = #{userPassword},
+        UPDATE stn_users SET
         name = #{userName}, email = #{userEmail}, address = #{userAddress},
         phone = #{userPhone}, gender = #{userGender} WHERE userId = #{userId}
     </update>

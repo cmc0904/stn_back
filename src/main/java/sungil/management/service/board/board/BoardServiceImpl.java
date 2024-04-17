@@ -91,6 +91,7 @@ public class BoardServiceImpl implements BoardService {
             boardRepository.deleteBoard(boardIdx);
             return new Result("DELETE_BOARD_COMPLETE");
         } catch (Exception e) {
+            e.printStackTrace();
             throw new DeleteFailedExecption();
         }
 
