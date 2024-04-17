@@ -132,6 +132,7 @@
         SELECT idx as boardIdx, title as boardTitle, detail as boardDetail, writerId, createAt, `private` as isPrivate
         FROM stn_board
         WHERE writerId = #{userId}
+        order by createAt desc
     </select>
 
 </mapper>
