@@ -5,6 +5,8 @@ import lombok.Getter;
 
 @Getter
 public class RoleDTO {
+    @NotBlank
     private String userId;
+    @NotBlank
     private String role;
 }

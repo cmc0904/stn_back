@@ -11,7 +11,11 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 public class RepairResponseDTO {
+
+    @NotNull
     private Integer repairIdx;
+    @NotBlank
     private String adminId;
+    @Future
     private LocalDateTime visitDate;
 }
