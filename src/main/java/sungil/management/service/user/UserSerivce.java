@@ -25,5 +25,6 @@ public interface UserSerivce {
     boolean isDuplicateUser(String userId);
     PageVO<UserVO> search(String type, String content, int currentPage);
     Result updateUser(UserDTO userDTO) throws UpdateFailedExecption;
+    PageVO<UserVO> getAdminsByPage(int page);
 
 }

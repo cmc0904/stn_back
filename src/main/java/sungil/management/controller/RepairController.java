@@ -35,7 +35,6 @@ public class RepairController {
 
     @GetMapping("/getRepairFiltering") // 대기
     public ResponseEntity<List<RepairVO>> getRepairWaitStatus(String type) {
-        System.out.println(repairService.getDataByType(type));
         return ResponseEntity.ok(repairService.getDataByType(type));
 
     }

@@ -23,7 +23,6 @@ import static javax.management.Query.and;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
     private final JwtTokenValidator jwtTokenValidator;
 
     @Autowired
@@ -46,22 +45,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-                .addFilterBefore(new JwtTokenFilter(jwtTokenValidator), UsernamePasswordAuthenticationFilter.class)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
-
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers(
-                              "/api/user/login"
-                            , "/api/user/register"
-                            , "/api/user/checkDuplicate"
+                        "/api/user/login"
+                        , "/api/user/register"
+                        , "/api/user/checkDuplicate"
                     ).permitAll()
                             .anyRequest().authenticated();
 
-                }
-
-
-        );
+                })
+                .addFilterAfter(new JwtTokenFilter(jwtTokenValidator), UsernamePasswordAuthenticationFilter.class)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
 
         return http.build();
