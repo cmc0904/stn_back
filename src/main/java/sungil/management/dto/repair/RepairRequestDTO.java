@@ -14,6 +14,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class RepairRequestDTO extends LoginedUser {
     private final String customerUserId = super.userId;
+    @NotBlank
+    @Size(min = 5, max = 100)
     private String problemTitle;
+    @NotBlank
+    @Size(min = 5, max = 50)
     private String problemComment;
 }
