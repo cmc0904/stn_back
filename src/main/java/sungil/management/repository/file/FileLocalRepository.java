@@ -16,7 +16,7 @@ import java.util.UUID;
 @Repository
 public class FileLocalRepository implements FileRepository {
 
-    private static final String PATH = "C:\\Users\\user\\Desktop\\img\\";
+    private static final String PATH = "/home/stninfo/imgs";
     @Override
     public List<String> save(MultipartFile[] files) throws IOException {
         List<String> fileNames = new ArrayList<>();

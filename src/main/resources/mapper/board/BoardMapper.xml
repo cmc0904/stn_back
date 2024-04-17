@@ -62,7 +62,7 @@
     <select id="getBoardByBoardIdx" parameterType="java.lang.Integer" resultType="sungil.management.vo.board.BoardVO">
         SELECT idx as boardIdx, title as boardTitle, detail as boardDetail, writerId, createAt
         FROM stn_board
-        WHERE idx = #{boardIdx} and private = 0
+        WHERE idx = #{boardIdx}
     </select>
 
     <select id="getBoardByWriterId" parameterType="java.lang.String" resultType="sungil.management.vo.board.BoardVO">
