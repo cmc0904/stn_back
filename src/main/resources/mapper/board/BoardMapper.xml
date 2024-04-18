@@ -17,18 +17,27 @@
     <select id="getBoardBy" resultType="sungil.management.vo.board.BoardVO">
         SELECT idx as boardIdx, title as boardTitle, detail as boardDetail, writerId, DATE_FORMAT(createAt, '%Y-%m-%d %H:%i:%s') as createAt, (select count(*) from stn_board_reader WHERE stn_board.idx = stn_board_reader.boardIdx) AS views
         FROM stn_board
-        <where>
-            <if test='"title".equals(type)'>
-                title LIKE CONCAT(#{content}, '%')
-            </if>
-            <if test='"writerId".equals(type)'>
-                `writerId` = #{content}
-            </if>
-            <if test='"date".equals(type)'>
-                DATE_FORMAT(createAt, '%Y-%m-%d') = DATE_FORMAT(#{content}, '%Y-%m-%d')
-            </if>
-            and `private` = 0
-        </where>
+        <choose>
+            <when test='!("all_data".equals(type))'>
+                <where>
+                    <if test='"title".equals(type)'>
+                        title LIKE CONCAT(#{content}, '%')
+                    </if>
+                    <if test='"writerId".equals(type)'>
+                        `writerId` = #{content}
+                    </if>
+                    <if test='"date".equals(type)'>
+                        DATE_FORMAT(createAt, '%Y-%m-%d') = DATE_FORMAT(#{content}, '%Y-%m-%d')
+                    </if>
+                    and `private` = 0
+                </where>
+            </when>
+            <otherwise>
+                where `private` = 0
+            </otherwise>
+
+        </choose>
+
         ORDER BY createAt DESC
         LIMIT 5 OFFSET #{offset}
     </select>
@@ -36,18 +45,27 @@
     <select id="count" resultType="int">
         SELECT count(*)
         FROM stn_board
-        <where>
-            <if test='"title".equals(type)'>
-                title LIKE CONCAT(#{content}, '%')
-            </if>
-            <if test='"writerId".equals(type)'>
-                `writerId` LIKE CONCAT(#{content}, '%')
-            </if>
-            <if test='"date".equals(type)'>
-                DATE_FORMAT(createAt, '%Y-%m-%d') = DATE_FORMAT(#{content}, '%Y-%m-%d')
-            </if>
-            and `private` = 0
-        </where>
+        <choose>
+            <when test='!("all_data".equals(type))'>
+                <where>
+                    <if test='"title".equals(type)'>
+                        title LIKE CONCAT(#{content}, '%')
+                    </if>
+                    <if test='"writerId".equals(type)'>
+                        `writerId` = #{content}
+                    </if>
+                    <if test='"date".equals(type)'>
+                        DATE_FORMAT(createAt, '%Y-%m-%d') = DATE_FORMAT(#{content}, '%Y-%m-%d')
+                    </if>
+                    and `private` = 0
+                </where>
+            </when>
+            <otherwise>
+                where `private` = 0
+            </otherwise>
+
+        </choose>
+
         ORDER BY createAt DESC
     </select>
     

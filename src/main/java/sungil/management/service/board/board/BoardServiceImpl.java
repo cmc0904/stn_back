@@ -33,11 +33,22 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public List<BoardVO> getBoardBy(String type, String content, int currentPage) {
+        if(content.isEmpty() && !type.equals("all_data")) {
+            return new ArrayList<>();
+        }
+
+
+
+
         return boardRepository.getBoardBy(type, content, (currentPage - 1) * 5);
     }
 
     @Override
     public int getBoardCount(String type, String content) {
+        if(content.isEmpty() && !type.equals("all_data")) {
+            return 0;
+        }
+
         return boardRepository.count(type, content);
     }
 
