@@ -1,6 +1,9 @@
 package sungil.management.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,9 +48,9 @@ public class BoardController {
     @PostMapping(path = "/postBoard")
     public ResponseEntity<Result> postBoard(
             @Valid  @RequestParam(value = "flL", required = false) MultipartFile[] files
-            , @Valid @RequestParam(value = "title") String title
-            , @Valid @RequestParam(value = "content") String content
-            , @Valid @RequestParam(value = "isPrivate") Integer isPrivate
+            , @Valid @Size(min = 5, max = 20) @NotBlank @RequestParam(value = "title") String title
+            , @Valid @Size(min = 5, max = 100) @NotBlank @RequestParam(value = "content") String content
+            , @Valid @NotNull @RequestParam(value = "isPrivate") Integer isPrivate
     ) throws CreateFailedExecption {
 
         BoardDTO boardDTO = new BoardDTO(title, content, isPrivate, files);
