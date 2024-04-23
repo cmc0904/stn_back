@@ -8,12 +8,14 @@ import org.springframework.web.bind.annotation.*;
 import sungil.management.dto.etc.IdxOnlyDTO;
 import sungil.management.execption.CreateFailedExecption;
 import sungil.management.execption.UpdateFailedExecption;
+import sungil.management.vo.etc.PageVO;
 import sungil.management.vo.etc.Result;
 import sungil.management.dto.repair.RepairRequestDTO;
 import sungil.management.dto.repair.RepairResponseDTO;
 import sungil.management.dto.repair.UpdateRepairResponseDTO;
 import sungil.management.service.repair.RepairService;
 import sungil.management.vo.repair.RepairVO;
+import sungil.management.vo.repair.SelectedAdminForChart;
 
 import java.util.List;
 
@@ -64,5 +66,13 @@ public class RepairController {
     @GetMapping("/searchRepair")
     public ResponseEntity<List<RepairVO>> searchRepair(String userId, String type){
         return ResponseEntity.ok(repairService.searchRepairLogsByUserIdAndMode(type, userId));
+    }
+
+
+    @GetMapping("/getSelectedAdminsCountForChart")
+    public ResponseEntity<PageVO<SelectedAdminForChart>> getSelectedAdminsForChart(Integer currentPage){
+        System.out.println(currentPage);
+        System.out.println(repairService.getSelectedAdminForChartData(currentPage));
+        return ResponseEntity.ok(repairService.getSelectedAdminForChartData(currentPage));
     }
 }

@@ -6,6 +6,7 @@ import sungil.management.dto.repair.RepairRequestDTO;
 import sungil.management.dto.repair.RepairResponseDTO;
 import sungil.management.dto.repair.UpdateRepairResponseDTO;
 import sungil.management.vo.repair.RepairVO;
+import sungil.management.vo.repair.SelectedAdminForChart;
 
 import java.util.List;
 
@@ -25,4 +26,11 @@ public interface RepaireRepository {
     List<RepairVO> getRepairDataType(String type);
     // 필터링 + 유저 아이디로 검색
     List<RepairVO> searchRepair(String type, String userId);
+
+    // 각 배정된 관리자 숫자
+    List<SelectedAdminForChart> getSelectedAdminForChartData(Integer offset);
+
+    int getSelectedAdminForChartDataLength();
+
+
 }

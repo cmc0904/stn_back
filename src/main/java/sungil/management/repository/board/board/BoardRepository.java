@@ -3,6 +3,7 @@ package sungil.management.repository.board.board;
 import org.apache.ibatis.annotations.Mapper;
 import sungil.management.dto.board.BoardDTO;
 import sungil.management.vo.board.BoardVO;
+import sungil.management.vo.board.PostingDayForChartData;
 
 import java.util.List;
 
@@ -37,4 +38,9 @@ public interface BoardRepository {
     List<BoardVO> getMyBoards(String userId);
 
     void readBoard(int boardIdx, String reader);
+
+    List<PostingDayForChartData> getPostingDataForChartData(Integer offset);
+
+    int getPostingDataForChartDataLength();
+
 }

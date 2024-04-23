@@ -12,6 +12,8 @@ import sungil.management.repository.board.board.BoardRepository;
 
 import sungil.management.repository.file.FileRepository;
 import sungil.management.vo.board.BoardVO;
+import sungil.management.vo.board.PostingDayForChartData;
+import sungil.management.vo.etc.PageVO;
 import sungil.management.vo.etc.Result;
 
 import java.util.ArrayList;
@@ -154,5 +156,10 @@ public class BoardServiceImpl implements BoardService {
         } catch (Exception e) {
             throw new CreateFailedExecption();
         }
+    }
+
+    @Override
+    public PageVO<PostingDayForChartData> getDataForChart(Integer currentPage) {
+        return new PageVO<PostingDayForChartData>(boardRepository.getPostingDataForChartDataLength(), boardRepository.getPostingDataForChartData((currentPage - 1) * 5));
     }
 }

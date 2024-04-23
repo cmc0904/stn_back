@@ -118,4 +118,29 @@
         update stn_repair_result set adminId = #{adminId}, visitDate = #{visitDate} where idx = #{repairResponseIdx}
     </update>
 
+
+    <select id="getSelectedAdminForChartData" resultType="sungil.management.vo.repair.SelectedAdminForChart">
+        SELECT a.userId, COUNT(srr.adminId) as `count`
+        FROM stn_roles a
+        LEFT JOIN stn_repair_result srr ON a.userId = srr.adminId
+        LEFT JOIN stn_repair sr ON sr.idx = srr.repairIdx
+        WHERE a.role = "Admin"
+        GROUP BY a.userId
+        <if test='offset != null'>
+            LIMIT 5 OFFSET ${offset}
+        </if>
+    </select>
+
+
+    <select id="getSelectedAdminForChartDataLength" resultType ="int">
+        SELECT COUNT(*) FROM (
+             SELECT a.userId
+             FROM stn_roles a
+                      LEFT JOIN stn_repair_result srr ON a.userId = srr.adminId
+                      LEFT JOIN stn_repair sr ON sr.idx = srr.repairIdx
+             WHERE a.role = "Admin"
+             GROUP BY a.userId
+        ) AS tb;
+
+    </select>
 </mapper>

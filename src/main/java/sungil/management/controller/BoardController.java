@@ -34,9 +34,7 @@ import java.util.*;
 public class BoardController {
     private final BoardService boardService;
     private final CommentService commentService;
-
     private final FileRepository fileRepository;
-
 
     @Autowired
     public BoardController(BoardService boardService, CommentService commentService, FileRepository fileRepository) {
@@ -140,6 +138,11 @@ public class BoardController {
     @GetMapping("/getMyBoards")
     public ResponseEntity<List<BoardVO>> getMyBoards(Authentication authentication) {
         return ResponseEntity.ok(boardService.getMyBoard(authentication.getName()));
+    }
+
+    @GetMapping("/getDataForChart")
+    public ResponseEntity<PageVO> getMyBoards(Integer currentPage) {
+        return ResponseEntity.ok(boardService.getDataForChart(currentPage));
     }
 
     @PutMapping("/readBoard")

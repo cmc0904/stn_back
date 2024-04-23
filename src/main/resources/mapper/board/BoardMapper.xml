@@ -153,4 +153,47 @@
         order by createAt desc
     </select>
 
+    <select id="getPostingDataForChartData" resultType="sungil.management.vo.board.PostingDayForChartData">
+        <![CDATA[
+            WITH RECURSIVE T AS (
+                SELECT LAST_DAY(now() - INTERVAL 1 MONTH) + INTERVAL 1 DAY AS startDate
+                UNION ALL
+                SELECT startDate + INTERVAL 1 DAY FROM T WHERE startDate < LAST_DAY(now())
+            )
+            SELECT DATE_FORMAT(T.startDate, '%d') AS day, COALESCE(board_count, 0) AS count
+            FROM T
+            LEFT JOIN (
+                SELECT DATE_FORMAT(createAt, '%d') AS day, COUNT(*) AS board_count
+                FROM stn_board
+                WHERE DATE_FORMAT(createAt, '%m') = DATE_FORMAT(now(), '%m')
+                GROUP BY DATE_FORMAT(createAt, '%d')
+            ) AS board_stats ON DATE_FORMAT(T.startDate, '%d') = board_stats.day
+            LIMIT 5 OFFSET #{offset};
+
+
+        ]]>
+    </select>
+
+    <select id="getPostingDataForChartDataLength" resultType="int">
+        <![CDATA[
+        WITH RECURSIVE T AS (
+            SELECT LAST_DAY(now() - INTERVAL 1 MONTH) + INTERVAL 1 DAY AS startDate
+            UNION ALL
+            SELECT startDate + INTERVAL 1 DAY FROM T WHERE startDate < LAST_DAY(now())
+        )
+
+        select COUNT(*) FROM (
+            SELECT DATE_FORMAT(T.startDate, '%d') AS day, COALESCE(board_count, 0) AS count
+            FROM T
+            LEFT JOIN (
+                SELECT DATE_FORMAT(createAt, '%d') AS day, COUNT(*) AS board_count
+                FROM stn_board
+                WHERE DATE_FORMAT(createAt, '%m') = DATE_FORMAT(now(), '%m')
+                GROUP BY DATE_FORMAT(createAt, '%d')
+            ) AS board_stats ON DATE_FORMAT(T.startDate, '%d') = board_stats.day
+        ) AS tb
+        ]]>
+
+    </select>
+
 </mapper>

@@ -4,12 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sungil.management.execption.CreateFailedExecption;
 import sungil.management.execption.UpdateFailedExecption;
+import sungil.management.vo.etc.PageVO;
 import sungil.management.vo.etc.Result;
 import sungil.management.dto.repair.RepairRequestDTO;
 import sungil.management.dto.repair.RepairResponseDTO;
 import sungil.management.dto.repair.UpdateRepairResponseDTO;
 import sungil.management.repository.repair.RepaireRepository;
 import sungil.management.vo.repair.RepairVO;
+import sungil.management.vo.repair.SelectedAdminForChart;
 
 import java.util.List;
 
@@ -89,5 +91,11 @@ public class RepairServiceImpl implements RepairService {
     public List<RepairVO> searchRepairLogsByUserIdAndMode(String type, String userId) {
         return repaireRepository.searchRepair(type, userId);
     }
+
+    @Override
+    public PageVO<SelectedAdminForChart> getSelectedAdminForChartData(Integer currentPage) {
+        return new PageVO<SelectedAdminForChart> (repaireRepository.getSelectedAdminForChartDataLength(), repaireRepository.getSelectedAdminForChartData(currentPage != null ? (currentPage - 1) * 5 : null));
+    }
+
 
 }
