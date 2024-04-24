@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import sungil.management.dto.repair.RepairRequestDTO;
 import sungil.management.dto.repair.RepairResponseDTO;
 import sungil.management.dto.repair.UpdateRepairResponseDTO;
+import sungil.management.vo.repair.RepairDayForChartData;
 import sungil.management.vo.repair.RepairVO;
 import sungil.management.vo.repair.SelectedAdminForChart;
 
@@ -32,5 +33,8 @@ public interface RepaireRepository {
 
     int getSelectedAdminForChartDataLength();
 
+    List<RepairDayForChartData> getRepairDataForChartData(Integer offset);
+
+    int getRepairDataForChartDataLength();
 
 }

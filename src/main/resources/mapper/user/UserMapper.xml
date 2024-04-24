@@ -105,4 +105,47 @@
         phone = #{userPhone}, gender = #{userGender} WHERE userId = #{userId}
     </update>
 
+
+    <select id="getJoinDataForChartData" resultType="sungil.management.vo.user.JoinDayForChartData">
+        <![CDATA[
+        WITH RECURSIVE T AS (
+            SELECT LAST_DAY(now() - INTERVAL 1 MONTH) + INTERVAL 1 DAY AS startDate
+        UNION ALL
+        SELECT startDate + INTERVAL 1 DAY FROM T WHERE startDate < LAST_DAY(now())
+            )
+        SELECT DATE_FORMAT(T.startDate, '%d') AS day, COALESCE(user_count, 0) AS count
+        FROM T
+            LEFT JOIN (
+            SELECT DATE_FORMAT(createAt, '%d') AS day, COUNT(*) AS user_count
+            FROM stn_users
+            WHERE DATE_FORMAT(createAt, '%m') = DATE_FORMAT(now(), '%m')
+            GROUP BY DATE_FORMAT(createAt, '%d')
+            ) AS user_stats ON DATE_FORMAT(T.startDate, '%d') = user_stats.day
+            LIMIT 5 OFFSET #{offset};
+        ]]>
+    </select>
+
+    <select id="getJoinDataForChartDataLength" resultType="int">
+        <![CDATA[
+        WITH RECURSIVE T AS (
+            SELECT LAST_DAY(now() - INTERVAL 1 MONTH) + INTERVAL 1 DAY AS startDate
+        UNION ALL
+        SELECT startDate + INTERVAL 1 DAY FROM T WHERE startDate < LAST_DAY(now())
+            )
+
+        select COUNT(*) FROM (
+             SELECT DATE_FORMAT(T.startDate, '%d') AS day, COALESCE(user_count, 0) AS count
+             FROM T
+                 LEFT JOIN (
+                 SELECT DATE_FORMAT(createAt, '%d') AS day, COUNT(*) AS user_count
+                 FROM stn_users
+                 WHERE DATE_FORMAT(createAt, '%m') = DATE_FORMAT(now(), '%m')
+                 GROUP BY DATE_FORMAT(createAt, '%d')
+                 ) AS user_stats ON DATE_FORMAT(T.startDate, '%d') = user_stats.day
+         ) AS tb
+        ]]>
+
+    </select>
+
+
 </mapper>

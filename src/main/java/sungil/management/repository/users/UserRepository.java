@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import sungil.management.dto.user.RoleDTO;
 import sungil.management.dto.user.UserDTO;
+import sungil.management.vo.user.JoinDayForChartData;
 import sungil.management.vo.user.UserVO;
 
 import java.util.List;
@@ -25,4 +26,8 @@ public interface UserRepository {
     Integer getAdminTotalLength();
 
     void updateUser(UserDTO userDTO);
+
+    List<JoinDayForChartData> getJoinDataForChartData(Integer offset);
+
+    int getJoinDataForChartDataLength();
 }

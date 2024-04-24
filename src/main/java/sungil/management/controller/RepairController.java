@@ -75,4 +75,9 @@ public class RepairController {
         System.out.println(repairService.getSelectedAdminForChartData(currentPage));
         return ResponseEntity.ok(repairService.getSelectedAdminForChartData(currentPage));
     }
+
+    @GetMapping("/getRepairDataForChart")
+    public ResponseEntity<PageVO> getMyRepairs(Integer currentPage){
+        return ResponseEntity.ok(repairService.getRepairDataForChart(currentPage));
+    }
 }
