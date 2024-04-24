@@ -7,6 +7,7 @@ import sungil.management.vo.etc.Result;
 import sungil.management.dto.repair.RepairRequestDTO;
 import sungil.management.dto.repair.RepairResponseDTO;
 import sungil.management.dto.repair.UpdateRepairResponseDTO;
+import sungil.management.vo.repair.RepairDayForChartData;
 import sungil.management.vo.repair.RepairVO;
 import sungil.management.vo.repair.SelectedAdminForChart;
 
@@ -24,6 +25,7 @@ public interface RepairService {
 
     PageVO<SelectedAdminForChart> getSelectedAdminForChartData(Integer currentPage);
 
+    PageVO<RepairDayForChartData> getRepairDataForChart(Integer currentPage);
 
 
 }

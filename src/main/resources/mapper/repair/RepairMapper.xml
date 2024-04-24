@@ -143,4 +143,45 @@
         ) AS tb;
 
     </select>
+
+    <select id="getRepairDataForChartData" resultType="sungil.management.vo.repair.RepairDayForChartData">
+        <![CDATA[
+        WITH RECURSIVE T AS (
+            SELECT LAST_DAY(now() - INTERVAL 1 MONTH) + INTERVAL 1 DAY AS startDate
+        UNION ALL
+        SELECT startDate + INTERVAL 1 DAY FROM T WHERE startDate < LAST_DAY(now())
+            )
+        SELECT DATE_FORMAT(T.startDate, '%d') AS day, COALESCE(repair_count, 0) AS count
+        FROM T
+            LEFT JOIN (
+            SELECT DATE_FORMAT(createAt, '%d') AS day, COUNT(*) AS repair_count
+            FROM stn_repair
+            WHERE DATE_FORMAT(createAt, '%m') = DATE_FORMAT(now(), '%m')
+            GROUP BY DATE_FORMAT(createAt, '%d')
+            ) AS repair_stats ON DATE_FORMAT(T.startDate, '%d') = repair_stats.day
+            LIMIT 5  OFFSET #{offset};
+        ]]>
+    </select>
+
+    <select id="getRepairDataForChartDataLength" resultType="int">
+        <![CDATA[
+        WITH RECURSIVE T AS (
+            SELECT LAST_DAY(now() - INTERVAL 1 MONTH) + INTERVAL 1 DAY AS startDate
+        UNION ALL
+        SELECT startDate + INTERVAL 1 DAY FROM T WHERE startDate < LAST_DAY(now())
+            )
+
+        select COUNT(*) FROM (
+                 SELECT DATE_FORMAT(T.startDate, '%d') AS day, COALESCE(repair_count, 0) AS count
+                 FROM T
+                     LEFT JOIN (
+                     SELECT DATE_FORMAT(createAt, '%d') AS day, COUNT(*) AS repair_count
+                     FROM stn_repair
+                     WHERE DATE_FORMAT(createAt, '%m') = DATE_FORMAT(now(), '%m')
+                     GROUP BY DATE_FORMAT(createAt, '%d')
+                     ) AS repair_stats ON DATE_FORMAT(T.startDate, '%d') = repair_stats.day
+             ) AS tb
+        ]]>
+
+    </select>
 </mapper>

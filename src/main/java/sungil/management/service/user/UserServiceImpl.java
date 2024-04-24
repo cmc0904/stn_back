@@ -16,6 +16,7 @@ import sungil.management.jwt.JwtTokenProvider;
 import sungil.management.jwt.JwtTokenValidator;
 import sungil.management.repository.users.UserRepository;
 import sungil.management.vo.etc.PageVO;
+import sungil.management.vo.user.JoinDayForChartData;
 import sungil.management.vo.user.UserVO;
 
 import java.util.*;
@@ -34,6 +35,11 @@ public class UserServiceImpl implements UserSerivce {
         this.jwtTokenProvider = jwtTokenProvider;
         this.jwtTokenValidator = jwtTokenValidator;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    public PageVO<JoinDayForChartData> getJoinDataForChart(Integer currentPage) {
+        return new PageVO<JoinDayForChartData>(userRepository.getJoinDataForChartDataLength(), userRepository.getJoinDataForChartData((currentPage - 1) * 5));
     }
 
     public PageVO<UserVO> getAllUsers(int currentPage) {

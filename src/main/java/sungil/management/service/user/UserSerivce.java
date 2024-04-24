@@ -10,6 +10,7 @@ import sungil.management.dto.user.UserDTO;
 import sungil.management.execption.DuplicateUserExecption;
 import sungil.management.execption.NotFoundUserExecption;
 import sungil.management.vo.etc.PageVO;
+import sungil.management.vo.user.JoinDayForChartData;
 import sungil.management.vo.user.UserVO;
 
 import java.util.List;
@@ -26,5 +27,7 @@ public interface UserSerivce {
     PageVO<UserVO> search(String type, String content, int currentPage);
     Result updateUser(UserDTO userDTO) throws UpdateFailedExecption;
     PageVO<UserVO> getAdminsByPage(int page);
+
+    PageVO<JoinDayForChartData> getJoinDataForChart(Integer currentPage);
 
 }
