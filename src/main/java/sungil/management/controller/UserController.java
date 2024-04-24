@@ -127,4 +127,10 @@ public class UserController {
     public Result check() {
         return new Result("JWT_CHECKED");
     }
+
+    @GetMapping("/getJoinDataForChart")
+    public ResponseEntity<PageVO> getMyJoins(Integer currentPage){
+        System.out.println(userSerivce.getJoinDataForChart(currentPage));
+        return ResponseEntity.ok(userSerivce.getJoinDataForChart(currentPage));
+    }
 }

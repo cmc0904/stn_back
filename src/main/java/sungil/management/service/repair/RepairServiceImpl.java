@@ -10,6 +10,7 @@ import sungil.management.dto.repair.RepairRequestDTO;
 import sungil.management.dto.repair.RepairResponseDTO;
 import sungil.management.dto.repair.UpdateRepairResponseDTO;
 import sungil.management.repository.repair.RepaireRepository;
+import sungil.management.vo.repair.RepairDayForChartData;
 import sungil.management.vo.repair.RepairVO;
 import sungil.management.vo.repair.SelectedAdminForChart;
 
@@ -24,6 +25,11 @@ public class RepairServiceImpl implements RepairService {
     @Autowired
     public RepairServiceImpl(RepaireRepository repaireRepository) {
         this.repaireRepository = repaireRepository;
+    }
+
+    @Override
+    public PageVO<RepairDayForChartData> getRepairDataForChart(Integer currentPage) {
+        return new PageVO<RepairDayForChartData>(repaireRepository.getRepairDataForChartDataLength(), repaireRepository.getRepairDataForChartData((currentPage-1)*5));
     }
 
     @Override
